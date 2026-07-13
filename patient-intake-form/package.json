@@ -1,0 +1,14 @@
+{
+  "name": "patient-intake-form",
+  "version": "1.0.0",
+  "description": "Patient-facing intake form that registers new patients into the clinic database and prints an OPD card",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "dotenv": "^16.4.5"
+  }
+}
