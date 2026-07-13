@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบฟอร์มลงทะเบียนผู้ป่วยใหม่ | First Clinic</title>
+<style>
+  :root {
+    --paper: #fcfaf4;
+    --surface: #ffffff;
+    --ink: #241f1a;
+    --ink-soft: #6e6357;
+    --ink-faint: #a89b87;
+    --gold: #a67c3d;
+    --gold-deep: #7c5a28;
+    --gold-mist: #f3e9d6;
+    --line: #e6dcc6;
+    --alert: #9b3f2c;
+    --alert-bg: #fbede7;
+    --radius: 10px;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Thai",
+      "Leelawadee UI", "Thonburi", "TH Sarabun New", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--paper); color: var(--ink); margin: 0; }
+  body { font-family: var(--font-ui); line-height: 1.7; -webkit-font-smoothing: antialiased; padding: 0 0 72px; }
+  h1, h2 { text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  .en { font-weight: 500; color: var(--ink-faint); font-size: .78em; letter-spacing: .01em; }
+  :focus-visible { outline: 2.5px solid var(--gold); outline-offset: 2px; }
+
+  .id-bar { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 18px 20px; text-align: center; flex-wrap: wrap; }
+  .id-bar .mark-logo { height: 26px; width: auto; display: block; }
+  .id-bar .sep { color: var(--ink-faint); }
+  .id-bar .role { font-size: .82rem; color: var(--ink-soft); }
+
+  .stage { max-width: 640px; margin: 0 auto; padding: 0 20px; }
+
+  .lede { padding: 22px 0 30px; border-bottom: 1px solid var(--line); margin-bottom: 30px; }
+  .lede h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; }
+  .lede .h-en { font-size: .85rem; color: var(--ink-faint); margin-bottom: 12px; display: block; }
+  .lede p { color: var(--ink-soft); font-size: .95rem; max-width: 58ch; }
+
+  .part { padding: 26px 0; border-bottom: 1px solid var(--line); }
+  .part:last-of-type { border-bottom: none; }
+  .part-label { display: flex; align-items: baseline; gap: 8px; font-size: .74rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 18px; }
+  .part-label .en { text-transform: none; letter-spacing: 0; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px; }
+  .row.of-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .row .full { grid-column: 1 / -1; }
+  @media (max-width: 560px) { .row, .row.of-3 { grid-template-columns: 1fr; } }
+
+  .field label { display: block; font-size: .84rem; font-weight: 600; margin-bottom: 7px; color: var(--ink); }
+  .field label .req { color: var(--alert); margin-left: 2px; }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 11px 13px; border: 1.5px solid var(--line); border-radius: var(--radius);
+    font-family: inherit; font-size: .95rem; background: var(--surface); color: var(--ink);
+  }
+  .field input::placeholder, .field textarea::placeholder { color: var(--ink-faint); }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--gold); }
+  .field textarea { resize: vertical; min-height: 64px; }
+
+  .choice-row { display: flex; gap: 20px; flex-wrap: wrap; padding-top: 4px; }
+  .choice-row label { display: flex; align-items: center; gap: 7px; font-weight: 500; font-size: .92rem; cursor: pointer; }
+  .choice-row input { width: auto; accent-color: var(--gold); }
+
+  .consent { display: flex; gap: 12px; align-items: flex-start; background: var(--gold-mist); border-radius: var(--radius); padding: 16px 18px; font-size: .85rem; color: var(--ink-soft); cursor: pointer; }
+  .consent input { width: auto; margin-top: 3px; accent-color: var(--gold-deep); flex-shrink: 0; }
+
+  .go-row { display: flex; justify-content: center; padding-top: 8px; }
+  .btn { display: inline-flex; align-items: center; gap: 9px; padding: 13px 28px; border-radius: 999px; font-weight: 700; font-size: .93rem; border: 1.5px solid transparent; cursor: pointer; font-family: inherit; }
+  .btn-fill { background: var(--gold); color: #fff; }
+  .btn-fill:hover { background: var(--gold-deep); }
+  .btn-fill:disabled { background: var(--ink-faint); cursor: not-allowed; }
+  .btn-line { background: transparent; border-color: var(--line); color: var(--ink); }
+  .btn-line:hover { border-color: var(--ink-faint); }
+  .btn-sm { padding: 9px 18px; font-size: .82rem; }
+
+  .flag { color: var(--alert); font-size: .85rem; text-align: center; margin-top: 14px; display: none; }
+
+  /* ============================================================
+     DOCUMENT VIEW (post-submit) — patient sees a locked preview,
+     staff unlocks printing with a PIN
+     ============================================================ */
+  #doc { display: none; }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(10px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @media (prefers-reduced-motion: reduce) { @keyframes riseIn { from { opacity: 1; } to { opacity: 1; } } }
+
+  .handoff { text-align: center; padding: 30px 0 8px; }
+  .handoff .icon { font-size: 1.6rem; margin-bottom: 8px; }
+  .handoff h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
+  .handoff .h-en { display: block; font-size: .82rem; color: var(--ink-faint); margin-bottom: 8px; }
+  .handoff p { color: var(--ink-soft); font-size: .9rem; max-width: 46ch; margin: 0 auto; }
+
+  /* #doc sits outside .stage (see HTML) with its own wider max-width,
+     so the A5 landscape card below can approach its natural 210mm width
+     on screen instead of being squeezed into the 640px form column. */
+  #doc { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+  .page-shell { display: flex; justify-content: center; padding: 26px 0 6px; }
+  .paper {
+    position: relative; overflow: hidden;
+    background: var(--surface); border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(36,31,26,.07), 0 20px 44px -16px rgba(36,31,26,.26);
+    width: min(210mm, 100%);
+    padding: 5% 4%;
+    line-height: 1.3;
+    color: var(--ink);
+    animation: riseIn .38s cubic-bezier(.2,.7,.3,1);
+  }
+
+  /* ---- row 1: title + clinic badge + HN/allergy pills ---- */
+  .card-head { display: flex; align-items: stretch; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+  .opd-title { flex: 0 0 auto; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+  .opd-title .t1 { font-size: 2.3rem; font-weight: 800; color: var(--gold); line-height: 1; letter-spacing: -.01em; }
+  .opd-title .t2 { font-size: 1.15rem; font-weight: 800; color: var(--ink); margin-top: 4px; }
+
+  .clinic-badge {
+    flex: 1; min-width: 240px; background: var(--gold); color: #fff; border-radius: 14px;
+    border: 2px solid var(--ink); padding: 12px 20px; display: flex; align-items: center; gap: 14px;
+  }
+  .brand-logo {
+    background: #fff; border-radius: 10px; padding: 8px 14px; flex-shrink: 0;
+    display: flex; align-items: center;
+  }
+  .brand-logo img { display: block; height: 46px; width: auto; }
+  .brand-text { min-width: 0; }
+  .brand-text .addr { font-size: .78rem; opacity: .95; line-height: 1.45; }
+
+  .id-pills { flex: 0 0 auto; width: 44mm; display: flex; flex-direction: column; gap: 8px; }
+  .id-pill {
+    border: 1.6px solid var(--gold); border-radius: 999px; padding: 6px 18px;
+    font-size: .82rem; font-weight: 700; color: var(--gold-deep); background: var(--surface);
+  }
+  .id-pill .pv { display: block; font-size: 1rem; font-weight: 800; color: var(--ink); min-height: 18px; margin-top: 2px; }
+
+  /* Allergy is safety-critical and can run long, so it gets its own
+     full-width callout instead of a fixed-size pill (which used to
+     overflow when patients listed several allergies). */
+  .allergy-banner {
+    background: var(--alert-bg); border: 1.5px solid var(--alert); border-radius: 12px;
+    padding: 8px 16px; margin-bottom: 10px; font-size: .9rem;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
+  }
+  .allergy-banner .ab-label { font-weight: 800; color: var(--alert); flex-shrink: 0; }
+  .allergy-banner .ab-value { font-weight: 700; color: var(--ink); }
+
+  /* ---- row 2: bordered form box with fill-in-the-blank lines ---- */
+  .form-box { border: 2px solid var(--ink); border-radius: 16px; padding: 12px 26px 14px; margin-bottom: 10px; }
+  .line-row { display: flex; flex-wrap: wrap; gap: 10px 30px; margin-bottom: 10px; }
+  .line-row:last-child { margin-bottom: 0; }
+  .line-field { flex: 1 1 140px; display: flex; align-items: baseline; gap: 8px; }
+  .line-field.wide { flex-basis: 320px; }
+  .line-field.mid { flex: 0 0 340px; }
+  .line-field.short { flex: 0 0 auto; }
+  .lf-label { white-space: nowrap; font-weight: 700; font-size: .92rem; }
+  .lf-fill {
+    flex: 1; border-bottom: 1.5px solid var(--ink); min-width: 24px; min-height: 20px;
+    padding: 0 5px 2px; font-weight: 700; font-size: 1rem;
+  }
+  .lf-fill.fixed { flex: 0 0 auto; width: 22mm; text-align: center; }
+  .lf-suffix { font-size: .92rem; font-weight: 600; }
+
+  /* ---- row 3: referral source + signature/watermark split ---- */
+  .split-area { display: grid; grid-template-columns: 1.25fr 1fr; gap: 0; margin-bottom: 10px; }
+  .find-block { padding-right: 20px; }
+  .find-block h4 { font-size: 1.05rem; font-weight: 800; margin-bottom: 4px; }
+  .find-block h4 em { font-style: normal; color: var(--gold-deep); }
+  .find-block .fq { font-size: .92rem; font-weight: 600; margin-bottom: 3px; }
+  .find-line { border-bottom: 1.5px solid var(--ink); min-height: 20px; font-weight: 800; font-size: 1.02rem; padding: 0 3px 2px; margin-bottom: 8px; }
+  .priv-label { font-size: .92rem; font-weight: 700; margin-bottom: 3px; }
+  .priv-line { border-bottom: 1.5px solid var(--ink); min-height: 22px; }
+
+  .sign-area {
+    position: relative; overflow: hidden; border-left: 1.5px solid var(--line); padding-left: 20px;
+    display: flex; flex-direction: column; justify-content: flex-end; min-height: 24mm;
+  }
+  .watermark { position: absolute; inset: 0; z-index: 0; pointer-events: none; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; padding-bottom: 16px; }
+  .watermark span {
+    display: block; white-space: nowrap; transform: rotate(-18deg);
+    font-size: 1rem; font-weight: 800; letter-spacing: .04em;
+    color: var(--gold); opacity: .32;
+  }
+  .sign-row { position: relative; z-index: 1; display: flex; gap: 20px; align-items: flex-end; }
+  .sig-blank { flex: 1.4; border-bottom: 1.5px solid var(--ink); min-height: 22px; }
+  .date-blank { flex: 1; border-bottom: 1.5px solid var(--ink); min-height: 22px; }
+  .sign-labels { position: relative; z-index: 1; display: flex; gap: 20px; margin-top: 4px; }
+  .sign-labels span { font-size: .78rem; color: var(--ink-soft); }
+  .sign-labels span:first-child { flex: 1.4; text-align: center; }
+  .sign-labels span:last-child { flex: 1; text-align: center; }
+  .sign-caption { position: relative; z-index: 1; display: flex; gap: 20px; margin-bottom: 8px; }
+  .sign-caption span:first-child { flex: 1.4; font-size: .95rem; font-weight: 700; }
+  .sign-caption span:last-child { flex: 1; font-size: .95rem; font-weight: 700; }
+
+  /* ---- staff-only print gate ---- */
+  .doc-actions { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 22px; }
+  .staff-toggle { background: none; border: none; color: var(--ink-faint); font-size: .78rem; cursor: pointer; text-decoration: underline; font-family: inherit; padding: 4px; }
+  .staff-toggle:hover { color: var(--ink-soft); }
+  .staff-gate {
+    display: none; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 999px; padding: 6px 8px 6px 16px; box-shadow: 0 6px 20px -8px rgba(36,31,26,.25);
+  }
+  .staff-gate.open { display: flex; }
+  .staff-gate span { font-size: .78rem; color: var(--ink-soft); white-space: nowrap; }
+  .staff-gate input { width: 84px; padding: 7px 10px; border: 1.5px solid var(--line); border-radius: 999px; font-family: inherit; letter-spacing: .2em; text-align: center; }
+  .staff-gate input:focus { outline: none; border-color: var(--gold); }
+  .pin-error { color: var(--alert); font-size: .76rem; display: none; }
+
+  /* Below A5's natural width, stack the header and form lines instead of
+     letting them wrap raggedly — keeps the on-screen preview readable on
+     phones (where patients actually fill this out). */
+  @media (max-width: 700px) {
+    .card-head { gap: 12px; }
+    .opd-title { flex: 1 1 100%; min-width: 0; }
+    .clinic-badge { flex: 1 1 100%; min-width: 0; }
+    .id-pills { flex: 1 1 100%; flex-direction: row; width: auto; }
+    .id-pill { flex: 1; min-width: 0; }
+    .line-row { flex-direction: column; gap: 10px; }
+    .line-field, .line-field.short, .line-field.wide, .line-field.mid { flex: 0 0 auto; flex-basis: auto; width: 100%; }
+    .split-area { grid-template-columns: 1fr; }
+    .sign-area { border-left: none; border-top: 1.5px solid var(--line); padding-left: 0; padding-top: 16px; margin-top: 4px; }
+  }
+
+  @media print {
+    @page { size: A5 landscape; margin: 0; }
+    body * { visibility: hidden; }
+    #doc, #doc * { visibility: visible; }
+    #doc { display: block !important; position: absolute; top: 0; left: 0; width: 100%; max-width: none; padding: 0; }
+    .handoff, .doc-actions { display: none !important; }
+    .page-shell { padding: 0; }
+    .paper { box-shadow: none; width: 210mm; min-height: 148mm; padding: 3mm 5mm; margin: 0; animation: none; overflow: visible; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<div class="id-bar">
+  <img class="mark-logo" src="logo.png" alt="First Clinic">
+  <span class="sep">·</span>
+  <span class="role">แบบฟอร์มลงทะเบียนผู้ป่วยใหม่ <span class="en">New Patient Registration</span></span>
+</div>
+
+<div class="stage">
+
+  <!-- ========================= FORM ========================= -->
+  <div id="formView">
+    <div class="lede">
+      <h1>ลงทะเบียนผู้ป่วยใหม่</h1>
+      <span class="h-en">New Patient Registration</span>
+      <p>กรอกข้อมูลตามจริงให้ครบถ้วน โดยเฉพาะประวัติแพ้ยาและโรคประจำตัว เพื่อความปลอดภัยในการรับบริการ
+      กรอกเสร็จแล้วกดส่งข้อมูล ระบบจะบันทึกข้อมูลของท่านเข้าสู่ระบบคลินิกและออกเลข HN ให้ทันที
+      จากนั้นจะแสดงเอกสารหน้าแรกของแฟ้ม OPD ให้เจ้าหน้าที่ตรวจสอบและพิมพ์ที่เคาน์เตอร์</p>
+    </div>
+
+    <form id="patientForm" novalidate>
+
+      <div class="part">
+        <span class="part-label">ข้อมูลส่วนตัว <span class="en">Personal Information</span></span>
+        <div class="row" style="margin-bottom:20px;">
+          <div class="field"><label>ชื่อ <span class="en">First name</span><span class="req">*</span></label><input type="text" name="firstName" required></div>
+          <div class="field"><label>นามสกุล <span class="en">Last name</span><span class="req">*</span></label><input type="text" name="lastName" required></div>
+        </div>
+        <div class="row" style="margin-bottom:20px;">
+          <div class="field"><label>ชื่อเล่น <span class="en">Nickname</span></label><input type="text" name="nickname"></div>
+          <div class="field"><label>วันเกิด <span class="en">Date of birth</span><span class="req">*</span></label><input type="date" name="dob" required></div>
+        </div>
+        <div class="field">
+          <label>เพศ <span class="en">Gender</span><span class="req">*</span></label>
+          <div class="choice-row">
+            <label><input type="radio" name="gender" value="หญิง" required> หญิง <span class="en">Female</span></label>
+            <label><input type="radio" name="gender" value="ชาย"> ชาย <span class="en">Male</span></label>
+            <label><input type="radio" name="gender" value="ไม่ระบุ"> ไม่ระบุ <span class="en">Not specified</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="part">
+        <span class="part-label">ข้อมูลติดต่อ <span class="en">Contact Information</span></span>
+        <div class="row" style="margin-bottom:20px;">
+          <div class="field"><label>เบอร์โทรศัพท์ <span class="en">Phone</span><span class="req">*</span></label><input type="tel" name="phone" required></div>
+          <div class="field"><label>อีเมล <span class="en">Email</span></label><input type="email" name="email"></div>
+        </div>
+        <div class="field">
+          <label>ที่อยู่ปัจจุบัน (จังหวัด) <span class="en">Current address (Province)</span></label>
+          <select name="address">
+            <option value="" disabled selected>เลือกจังหวัด</option>
+            <option value="กระบี่">กระบี่</option>
+            <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+            <option value="กาญจนบุรี">กาญจนบุรี</option>
+            <option value="กาฬสินธุ์">กาฬสินธุ์</option>
+            <option value="กำแพงเพชร">กำแพงเพชร</option>
+            <option value="ขอนแก่น">ขอนแก่น</option>
+            <option value="จันทบุรี">จันทบุรี</option>
+            <option value="ฉะเชิงเทรา">ฉะเชิงเทรา</option>
+            <option value="ชลบุรี">ชลบุรี</option>
+            <option value="ชัยนาท">ชัยนาท</option>
+            <option value="ชัยภูมิ">ชัยภูมิ</option>
+            <option value="ชุมพร">ชุมพร</option>
+            <option value="เชียงราย">เชียงราย</option>
+            <option value="เชียงใหม่">เชียงใหม่</option>
+            <option value="ตรัง">ตรัง</option>
+            <option value="ตราด">ตราด</option>
+            <option value="ตาก">ตาก</option>
+            <option value="นครนายก">นครนายก</option>
+            <option value="นครปฐม">นครปฐม</option>
+            <option value="นครพนม">นครพนม</option>
+            <option value="นครราชสีมา">นครราชสีมา</option>
+            <option value="นครศรีธรรมราช">นครศรีธรรมราช</option>
+            <option value="นครสวรรค์">นครสวรรค์</option>
+            <option value="นนทบุรี">นนทบุรี</option>
+            <option value="นราธิวาส">นราธิวาส</option>
+            <option value="น่าน">น่าน</option>
+            <option value="บึงกาฬ">บึงกาฬ</option>
+            <option value="บุรีรัมย์">บุรีรัมย์</option>
+            <option value="ปทุมธานี">ปทุมธานี</option>
+            <option value="ประจวบคีรีขันธ์">ประจวบคีรีขันธ์</option>
+            <option value="ปราจีนบุรี">ปราจีนบุรี</option>
+            <option value="ปัตตานี">ปัตตานี</option>
+            <option value="พระนครศรีอยุธยา">พระนครศรีอยุธยา</option>
+            <option value="พะเยา">พะเยา</option>
+            <option value="พังงา">พังงา</option>
+            <option value="พัทลุง">พัทลุง</option>
+            <option value="พิจิตร">พิจิตร</option>
+            <option value="พิษณุโลก">พิษณุโลก</option>
+            <option value="เพชรบุรี">เพชรบุรี</option>
+            <option value="เพชรบูรณ์">เพชรบูรณ์</option>
+            <option value="แพร่">แพร่</option>
+            <option value="ภูเก็ต">ภูเก็ต</option>
+            <option value="มหาสารคาม">มหาสารคาม</option>
+            <option value="มุกดาหาร">มุกดาหาร</option>
+            <option value="แม่ฮ่องสอน">แม่ฮ่องสอน</option>
+            <option value="ยโสธร">ยโสธร</option>
+            <option value="ยะลา">ยะลา</option>
+            <option value="ร้อยเอ็ด">ร้อยเอ็ด</option>
+            <option value="ระนอง">ระนอง</option>
+            <option value="ระยอง">ระยอง</option>
+            <option value="ราชบุรี">ราชบุรี</option>
+            <option value="ลพบุรี">ลพบุรี</option>
+            <option value="ลำปาง">ลำปาง</option>
+            <option value="ลำพูน">ลำพูน</option>
+            <option value="เลย">เลย</option>
+            <option value="ศรีสะเกษ">ศรีสะเกษ</option>
+            <option value="สกลนคร">สกลนคร</option>
+            <option value="สงขลา">สงขลา</option>
+            <option value="สตูล">สตูล</option>
+            <option value="สมุทรปราการ">สมุทรปราการ</option>
+            <option value="สมุทรสงคราม">สมุทรสงคราม</option>
+            <option value="สมุทรสาคร">สมุทรสาคร</option>
+            <option value="สระแก้ว">สระแก้ว</option>
+            <option value="สระบุรี">สระบุรี</option>
+            <option value="สิงห์บุรี">สิงห์บุรี</option>
+            <option value="สุโขทัย">สุโขทัย</option>
+            <option value="สุพรรณบุรี">สุพรรณบุรี</option>
+            <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
+            <option value="สุรินทร์">สุรินทร์</option>
+            <option value="หนองคาย">หนองคาย</option>
+            <option value="หนองบัวลำภู">หนองบัวลำภู</option>
+            <option value="อ่างทอง">อ่างทอง</option>
+            <option value="อำนาจเจริญ">อำนาจเจริญ</option>
+            <option value="อุดรธานี">อุดรธานี</option>
+            <option value="อุตรดิตถ์">อุตรดิตถ์</option>
+            <option value="อุทัยธานี">อุทัยธานี</option>
+            <option value="อุบลราชธานี">อุบลราชธานี</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="part">
+        <span class="part-label">ข้อมูลด้านสุขภาพ <span class="en">Health Information — important for your safety</span></span>
+        <div class="field">
+          <label>ประวัติแพ้ยา / แพ้สารเคมี / แพ้อาหาร <span class="en">Drug / chemical / food allergies</span></label>
+          <textarea name="allergy" placeholder="ระบุ หรือเขียนว่า “ไม่มี”"></textarea>
+        </div>
+      </div>
+
+      <div class="part">
+        <span class="part-label">รู้จัก First Clinic จากไหน <span class="en">How did you find First Clinic?</span></span>
+        <div class="choice-row">
+          <label><input type="radio" name="findUs" value="Facebook"> Facebook</label>
+          <label><input type="radio" name="findUs" value="Instagram (IG)"> Instagram (IG)</label>
+          <label><input type="radio" name="findUs" value="AI (ChatGPT, Gemini)"> AI (ChatGPT, Gemini)</label>
+          <label><input type="radio" name="findUs" value="เพื่อนแนะนำ"> เพื่อนแนะนำ <span class="en">Friend referral</span></label>
+          <label><input type="radio" name="findUs" value="รีวิวจากช่อง"> รีวิวจากช่อง <span class="en">Review channel</span></label>
+          <label><input type="radio" name="findUs" value="Google"> Google</label>
+        </div>
+      </div>
+
+      <div class="part">
+        <label class="consent">
+          <input type="checkbox" id="consentBox" required>
+          <span>ข้าพเจ้ายินยอมให้ First Clinic เก็บและใช้ข้อมูลข้างต้นเพื่อลงทะเบียนและให้บริการทางการแพทย์
+          ตามนโยบายความเป็นส่วนตัว (PDPA) และรับทราบว่าข้อมูลนี้เป็นข้อมูลที่ข้าพเจ้าให้ไว้เอง
+          <span class="en" style="display:block;margin-top:4px;">I consent to First Clinic collecting and using the information above for registration and medical care under its privacy policy.</span></span>
+        </label>
+      </div>
+
+      <div class="go-row">
+        <button type="submit" class="btn btn-fill" id="submitBtn">ส่งข้อมูลให้เจ้าหน้าที่ →</button>
+      </div>
+      <p class="flag" id="errorMsg">กรุณากรอกข้อมูลที่มี * ให้ครบถ้วน และติ๊กยินยอมก่อนดำเนินการ</p>
+      <p class="flag" id="saveError"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ========================= DOCUMENT (A5) =========================
+     Deliberately outside .stage: the OPD card wants to approach its
+     natural A5 width on screen, not be squeezed into the 640px form
+     column — hence its own wider max-width below. -->
+<div id="doc">
+
+    <div class="handoff">
+      <div class="icon">🤝</div>
+      <h2>ส่งข้อมูลเรียบร้อยแล้ว</h2>
+      <span class="h-en">Submitted — please hand this device to clinic staff</span>
+      <p>กรุณาส่งอุปกรณ์นี้คืนให้เจ้าหน้าที่ที่เคาน์เตอร์เพื่อตรวจสอบและพิมพ์เอกสาร พร้อมแนบสำเนาบัตรประชาชนของท่าน</p>
+    </div>
+
+    <div class="page-shell">
+      <div class="paper">
+
+        <div class="card-head">
+          <div class="opd-title">
+            <span class="t1">OPD Card</span>
+            <span class="t2">เวชระเบียน</span>
+          </div>
+          <div class="clinic-badge">
+            <div class="brand-logo"><img src="logo.png" alt="First Clinic"></div>
+            <div class="brand-text">
+              <div class="addr">555/19 อาคาร Taka Town ชั้น 2 ถ.สุขุมวิท 39 · โทร. 094-409-4449, 092-808-8088 · LINE: @firstclinic</div>
+            </div>
+          </div>
+          <div class="id-pills">
+            <div class="id-pill">HN<span class="pv">&nbsp;</span></div>
+          </div>
+        </div>
+
+        <div class="allergy-banner">
+          <span class="ab-label">แพ้ยา / สารเคมี / อาหาร (Allergy):</span>
+          <span class="ab-value" id="outAllergy"></span>
+        </div>
+
+        <div class="form-box">
+          <div class="line-row">
+            <div class="line-field wide"><span class="lf-label">ชื่อ-นามสกุล (Full Name):</span><span class="lf-fill" id="outName"></span></div>
+            <div class="line-field"><span class="lf-label">ชื่อเล่น (Nickname):</span><span class="lf-fill" id="outNickname"></span></div>
+            <div class="line-field short"><span class="lf-label">เพศ (Gender):</span><span class="lf-fill fixed" id="outGender"></span></div>
+          </div>
+          <div class="line-row">
+            <div class="line-field"><span class="lf-label">วัน เดือน ปีเกิด (Date of Birth):</span><span class="lf-fill" id="outDob"></span></div>
+            <div class="line-field short"><span class="lf-label">อายุ (Age):</span><span class="lf-fill fixed" id="outAge"></span><span class="lf-suffix">ปี</span></div>
+          </div>
+          <div class="line-row">
+            <div class="line-field"><span class="lf-label">ที่อยู่ (Address):</span><span class="lf-fill" id="outAddress"></span></div>
+          </div>
+          <div class="line-row">
+            <div class="line-field mid"><span class="lf-label">เบอร์ติดต่อ (Phone Number):</span><span class="lf-fill" id="outPhone"></span></div>
+            <div class="line-field"><span class="lf-label">อีเมลล์ (E-Mail):</span><span class="lf-fill" id="outEmail"></span></div>
+          </div>
+        </div>
+
+        <div class="split-area">
+          <div class="find-block">
+            <h4>How did you find <em>FIRST CLINIC</em>?</h4>
+            <div class="fq">รู้จัก First Clinic จากไหน :</div>
+            <div class="find-line" id="outFindUs"></div>
+            <div class="priv-label">สิทธิพิเศษ</div>
+            <div class="priv-line">&nbsp;</div>
+          </div>
+          <div class="sign-area">
+            <div class="watermark"><span>ใช้สำหรับ First Clinic เท่านั้น</span></div>
+            <div class="sign-caption"><span>ลงชื่อ</span><span>วันที่</span></div>
+            <div class="sign-row"><div class="sig-blank"></div><div class="date-blank"></div></div>
+            <div class="sign-labels"><span>(Signature)</span><span>(Visit Date)</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="doc-actions">
+      <button class="btn btn-line btn-sm" id="editBtn">← แก้ไขข้อมูล</button>
+      <button class="staff-toggle" id="staffToggle" type="button">สำหรับเจ้าหน้าที่ · พิมพ์เอกสาร (Staff only · Print)</button>
+      <div class="staff-gate" id="staffGate">
+        <span>รหัสพนักงาน</span>
+        <input type="password" id="pinInput" inputmode="numeric" maxlength="4" placeholder="••••">
+        <button class="btn btn-fill btn-sm" id="unlockPrintBtn">🖨 พิมพ์</button>
+      </div>
+      <span class="pin-error" id="pinError">รหัสไม่ถูกต้อง</span>
+    </div>
+  </div>
+
+<script>
+(function () {
+  var STAFF_PIN = '1234'; // TODO: เจ้าหน้าที่คลินิกควรเปลี่ยนรหัสนี้ก่อนใช้งานจริง
+
+  var form = document.getElementById('patientForm');
+  var formView = document.getElementById('formView');
+  var doc = document.getElementById('doc');
+  var errorMsg = document.getElementById('errorMsg');
+  var saveError = document.getElementById('saveError');
+  var submitBtn = document.getElementById('submitBtn');
+  var submitBtnDefaultText = submitBtn.textContent;
+
+  function calcAge(dobStr) {
+    var dob = new Date(dobStr);
+    var today = new Date();
+    var age = today.getFullYear() - dob.getFullYear();
+    var m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+    return age;
+  }
+
+  function formatThaiDate(d) {
+    var day = String(d.getDate()).padStart(2, '0');
+    var month = String(d.getMonth() + 1).padStart(2, '0');
+    var yearBE = d.getFullYear() + 543;
+    return day + '/' + month + '/' + yearBE;
+  }
+
+  function fill(id, value) {
+    document.getElementById(id).textContent = (value && value.trim()) ? value : '—';
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!form.checkValidity() || !document.getElementById('consentBox').checked) {
+      errorMsg.style.display = 'block';
+      form.reportValidity();
+      return;
+    }
+    errorMsg.style.display = 'none';
+    saveError.style.display = 'none';
+
+    var data = new FormData(form);
+    var dobVal = data.get('dob');
+
+    var payload = {
+      first_name: data.get('firstName'),
+      last_name: data.get('lastName'),
+      nickname: data.get('nickname'),
+      gender: data.get('gender'),
+      date_of_birth: dobVal || null,
+      phone: data.get('phone'),
+      email: data.get('email'),
+      address: data.get('address'),
+      allergy_history: data.get('allergy') || 'ไม่มี',
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'กำลังบันทึก...';
+
+    fetch('/api/patients', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (body) {
+          return { ok: res.ok, body: body };
+        });
+      })
+      .then(function (result) {
+        if (!result.ok) throw new Error(result.body.error || 'บันทึกข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+
+        fill('outName', (data.get('firstName') + ' ' + data.get('lastName')).trim());
+        fill('outNickname', data.get('nickname'));
+        fill('outGender', data.get('gender'));
+        fill('outDob', dobVal ? formatThaiDate(new Date(dobVal)) : '');
+        fill('outAge', dobVal ? String(calcAge(dobVal)) : '');
+        fill('outPhone', data.get('phone'));
+        fill('outEmail', data.get('email'));
+        fill('outAddress', data.get('address'));
+        fill('outAllergy', data.get('allergy') || 'ไม่มี');
+        fill('outFindUs', data.get('findUs'));
+
+        formView.style.display = 'none';
+        doc.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      })
+      .catch(function (err) {
+        saveError.textContent = err.message || 'บันทึกข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง';
+        saveError.style.display = 'block';
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = submitBtnDefaultText;
+      });
+  });
+
+  document.getElementById('editBtn').addEventListener('click', function () {
+    doc.style.display = 'none';
+    formView.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  var staffToggle = document.getElementById('staffToggle');
+  var staffGate = document.getElementById('staffGate');
+  var pinInput = document.getElementById('pinInput');
+  var pinError = document.getElementById('pinError');
+
+  staffToggle.addEventListener('click', function () {
+    staffGate.classList.toggle('open');
+    pinError.style.display = 'none';
+    if (staffGate.classList.contains('open')) pinInput.focus();
+  });
+
+  document.getElementById('unlockPrintBtn').addEventListener('click', function () {
+    if (pinInput.value === STAFF_PIN) {
+      pinError.style.display = 'none';
+      window.print();
+    } else {
+      pinError.style.display = 'inline';
+      pinInput.value = '';
+      pinInput.focus();
+    }
+  });
+
+  pinInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') document.getElementById('unlockPrintBtn').click();
+  });
+})();
+</script>
+
+</body>
+</html>
