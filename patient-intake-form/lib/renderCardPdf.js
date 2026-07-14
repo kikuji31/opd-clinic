@@ -23,6 +23,15 @@ function formatThaiDate(d) {
   return `${day}/${month}/${yearBE}`;
 }
 
+// Printed card shows gender as a single letter rather than the full Thai
+// word the patient picked in the form.
+function genderLabel(g) {
+  if (g === 'ชาย') return 'M';
+  if (g === 'หญิง') return 'F';
+  if (g === 'ไม่ระบุ') return 'L';
+  return g;
+}
+
 function escapeHtml(str) {
   return String(str ?? '').replace(/[&<>"']/g, (c) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -59,7 +68,7 @@ function renderCardHtml(patient) {
 
   docHtml = fillSpan(docHtml, 'outName', `${patient.first_name || ''} ${patient.last_name || ''}`.trim());
   docHtml = fillSpan(docHtml, 'outNickname', patient.nickname);
-  docHtml = fillSpan(docHtml, 'outGender', patient.gender);
+  docHtml = fillSpan(docHtml, 'outGender', genderLabel(patient.gender));
   docHtml = fillSpan(docHtml, 'outDob', dobDate ? formatThaiDate(dobDate) : '');
   docHtml = fillSpan(docHtml, 'outAge', dobDate ? String(calcAge(dobVal)) : '');
   docHtml = fillSpan(docHtml, 'outAddress', patient.address);
@@ -69,12 +78,11 @@ function renderCardHtml(patient) {
   docHtml = fillSpan(docHtml, 'outFindUs', patient.find_us);
   docHtml = fillSpan(docHtml, 'outVisitDate', formatThaiDate(new Date()));
 
-  docHtml = fillSpan(docHtml, 'outReason', patient.reason_for_visit);
   docHtml = fillSpan(docHtml, 'outUnderlying', patient.underlying_disease);
   docHtml = fillSpan(docHtml, 'outMedication', patient.regular_medication);
   docHtml = fillSpan(docHtml, 'outDrugAllergy', patient.drug_allergy);
   docHtml = fillSpan(docHtml, 'outAllergySymptom', patient.allergy_symptom);
-  docHtml = fillSpan(docHtml, 'outSpecificAllergy', patient.specific_allergy);
+  docHtml = fillSpan(docHtml, 'outAnestheticAllergy', patient.anesthetic_allergy);
   docHtml = fillSpan(docHtml, 'outLifestyle', patient.lifestyle);
   docHtml = fillSpan(docHtml, 'outSurgery', patient.facial_surgery);
   docHtml = fillSpan(docHtml, 'outAccident', patient.facial_accident);

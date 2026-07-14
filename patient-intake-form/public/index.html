@@ -163,12 +163,12 @@
   /* ---- row 3: referral source + signature/watermark split ---- */
   .split-area { display: grid; grid-template-columns: 1.25fr 1fr; gap: 0; margin-bottom: 6px; }
   .find-block { padding-right: 20px; }
-  .find-block h4 { font-size: .88rem; font-weight: 800; margin-bottom: 2px; }
+  .find-block h4 { font-size: .84rem; font-weight: 800; margin-bottom: 1px; }
   .find-block h4 em { font-style: normal; color: var(--gold-deep); }
-  .find-block .fq { font-size: .78rem; font-weight: 600; margin-bottom: 2px; }
-  .find-line { border-bottom: 1.5px solid var(--ink); min-height: 17px; font-weight: 800; font-size: .86rem; padding: 0 3px 1px; margin-bottom: 4px; }
-  .priv-label { font-size: .78rem; font-weight: 700; margin-bottom: 2px; }
-  .priv-line { border-bottom: 1.5px solid var(--ink); min-height: 17px; }
+  .find-block .fq { font-size: .76rem; font-weight: 600; margin-bottom: 1px; }
+  .find-line { border-bottom: 1.5px solid var(--ink); min-height: 16px; font-weight: 800; font-size: .84rem; padding: 0 3px 1px; margin-bottom: 2px; }
+  .priv-label { font-size: .76rem; font-weight: 700; margin-bottom: 1px; }
+  .priv-line { border-bottom: 1.5px solid var(--ink); min-height: 16px; }
 
   .sign-area {
     position: relative; overflow: hidden; border-left: 1.5px solid var(--line); padding-left: 20px;
@@ -191,18 +191,15 @@
   .sign-caption span:first-child { flex: 1.4; font-size: .82rem; font-weight: 700; }
   .sign-caption span:last-child { flex: 1; font-size: .82rem; font-weight: 700; }
 
-  /* ---- OPD First Visit Note: merged onto the front card, so it has to
-     run smaller than a standalone page would — accepted trade-off for
-     keeping everything on the one small 148mm-tall printed card. ---- */
-  .fvn-block { margin-top: 4px; padding-top: 6px; border-top: 1.3px dashed var(--line); }
-  .fvn-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 4px; }
-  .fvn-title { font-size: .74rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--gold-deep); flex-shrink: 0; }
-  .fvn-reason { font-size: .74rem; color: var(--ink-soft); }
-  .fvn-reason b { color: var(--ink); font-weight: 700; }
-  .back-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
-  .qa-line { display: flex; align-items: baseline; gap: 8px; padding: 2px 0; }
-  .qa-line .q { flex: 0 0 auto; font-weight: 700; font-size: .72rem; color: var(--ink); }
-  .qa-line .a { flex: 1; font-size: .72rem; color: var(--ink-soft); text-align: right; font-weight: 600; line-height: 1.25; }
+  /* ---- OPD First Visit Note: nested inside .find-block (left column
+     only) so the right column stays clear its whole height for staff to
+     lay a photocopied ID card on top, same as before this was added. ---- */
+  .fvn-block { margin-top: 2px; padding-top: 3px; border-top: 1.3px dashed var(--line); }
+  .fvn-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 2px; }
+  .fvn-title { font-size: .68rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--gold-deep); flex-shrink: 0; }
+  .qa-line { display: flex; align-items: baseline; gap: 6px; padding: 1px 0; }
+  .qa-line .q { flex: 0 0 auto; font-weight: 700; font-size: .62rem; color: var(--ink); }
+  .qa-line .a { flex: 1; font-size: .62rem; color: var(--ink-soft); text-align: right; font-weight: 600; line-height: 1.15; }
 
   /* ---- staff-only print gate ---- */
   .doc-actions { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 22px; }
@@ -231,7 +228,6 @@
     .line-field, .line-field.short, .line-field.wide, .line-field.mid { flex: 0 0 auto; flex-basis: auto; width: 100%; }
     .split-area { grid-template-columns: 1fr; }
     .sign-area { border-left: none; border-top: 1.5px solid var(--line); padding-left: 0; padding-top: 16px; margin-top: 4px; }
-    .back-grid { grid-template-columns: 1fr; }
   }
 
   @media print {
@@ -400,11 +396,6 @@
       <div class="part">
         <span class="part-label">ข้อมูลสำหรับแพทย์ <span class="en">First Visit Note</span></span>
 
-        <div class="field" style="margin-bottom:20px;">
-          <label>ปรึกษาแพทย์เรื่อง <span class="en">Reason for consultation</span></label>
-          <textarea name="reasonForVisit" placeholder="เช่น ต้องการปรึกษาเรื่อง Botox, Filler, ปัญหาผิวหน้า ฯลฯ"></textarea>
-        </div>
-
         <div class="row" style="margin-bottom:20px;">
           <div class="field">
             <label>โรคประจำตัว <span class="en">Underlying disease</span></label>
@@ -440,11 +431,10 @@
         </div>
 
         <div class="field" style="margin-bottom:20px;">
-          <label>แพ้ยากลุ่มนี้หรือไม่ <span class="en">Specific drug allergy</span></label>
+          <label>แพ้ยาชาไหม <span class="en">Allergic to local anesthetic</span></label>
           <div class="choice-row">
-            <label><input type="checkbox" name="specificAllergy" value="Amoxicillin"> Amoxicillin</label>
-            <label><input type="checkbox" name="specificAllergy" value="Rulid/Roxithromycin"> Rulid/Roxithromycin</label>
-            <label><input type="checkbox" name="specificAllergy" value="ยาชา"> ยาชา <span class="en">Local anesthetic</span></label>
+            <label><input type="radio" name="anestheticAllergy" value="ไม่แพ้" checked> ไม่แพ้</label>
+            <label><input type="radio" name="anestheticAllergy" value="แพ้"> แพ้</label>
           </div>
         </div>
 
@@ -453,11 +443,6 @@
           <div class="choice-row">
             <label><input type="checkbox" name="lifestyle" value="ตั้งครรภ์"> ตั้งครรภ์ <span class="en">Pregnant</span></label>
             <label><input type="checkbox" name="lifestyle" value="ให้นมบุตร"> ให้นมบุตร <span class="en">Breastfeeding</span></label>
-            <label><input type="checkbox" name="lifestyle" value="วางแผนจะมีบุตร"> วางแผนจะมีบุตร <span class="en">Planning pregnancy</span></label>
-            <label><input type="checkbox" name="lifestyle" value="สูบบุหรี่"> สูบบุหรี่ <span class="en">Smoking</span></label>
-            <label><input type="checkbox" name="lifestyle" value="ดื่มสุรา"> ดื่มสุรา <span class="en">Alcohol</span></label>
-            <label><input type="checkbox" name="lifestyle" value="ทานอาหารเสริม"> ทานอาหารเสริม <span class="en">Supplements</span></label>
-            <label><input type="checkbox" name="lifestyle" value="ใช้ครีมบำรุง"> ใช้ครีมบำรุง <span class="en">Skincare products</span></label>
           </div>
         </div>
       </div>
@@ -510,14 +495,17 @@
       </div>
 
       <div class="part">
-        <span class="part-label">รู้จัก First Clinic จากไหน <span class="en">How did you find First Clinic?</span></span>
+        <span class="part-label">รู้จัก First Clinic จากไหน <span class="en">How did you find First Clinic? (เลือกได้หลายข้อ)</span></span>
         <div class="choice-row">
-          <label><input type="radio" name="findUs" value="Facebook"> Facebook</label>
-          <label><input type="radio" name="findUs" value="Instagram (IG)"> Instagram (IG)</label>
-          <label><input type="radio" name="findUs" value="AI (ChatGPT, Gemini)"> AI (ChatGPT, Gemini)</label>
-          <label><input type="radio" name="findUs" value="เพื่อนแนะนำ"> เพื่อนแนะนำ <span class="en">Friend referral</span></label>
-          <label><input type="radio" name="findUs" value="รีวิวจากช่อง"> รีวิวจากช่อง <span class="en">Review channel</span></label>
-          <label><input type="radio" name="findUs" value="Google"> Google</label>
+          <label><input type="checkbox" name="findUs" value="Facebook"> Facebook</label>
+          <label><input type="checkbox" name="findUs" value="Instagram (IG)"> Instagram (IG)</label>
+          <label><input type="checkbox" name="findUs" value="AI (ChatGPT, Gemini)"> AI (ChatGPT, Gemini)</label>
+          <label><input type="checkbox" name="findUs" value="เพื่อนแนะนำ"> เพื่อนแนะนำ <span class="en">Friend referral</span></label>
+          <label><input type="checkbox" name="findUs" value="Google"> Google</label>
+          <label><input type="checkbox" name="findUs" value="อื่นๆ"> อื่นๆ <span class="en">Other</span></label>
+        </div>
+        <div class="field" style="margin-top:14px;">
+          <input type="text" name="findUsOther" placeholder="ระบุ (ถ้าเลือกอื่นๆ)">
         </div>
       </div>
 
@@ -588,9 +576,9 @@
           </div>
           <div class="line-row">
             <div class="line-field"><span class="lf-label">ที่อยู่ (Address):</span><span class="lf-fill" id="outAddress"></span></div>
+            <div class="line-field mid"><span class="lf-label">เบอร์ติดต่อ (Phone Number):</span><span class="lf-fill" id="outPhone"></span></div>
           </div>
           <div class="line-row">
-            <div class="line-field mid"><span class="lf-label">เบอร์ติดต่อ (Phone Number):</span><span class="lf-fill" id="outPhone"></span></div>
             <div class="line-field"><span class="lf-label">อีเมลล์ (E-Mail):</span><span class="lf-fill" id="outEmail"></span></div>
           </div>
         </div>
@@ -602,35 +590,28 @@
             <div class="find-line" id="outFindUs"></div>
             <div class="priv-label">สิทธิพิเศษ</div>
             <div class="priv-line">&nbsp;</div>
-          </div>
-          <div class="sign-area">
-            <div class="watermark"><span>ใช้สำหรับ First Clinic เท่านั้น</span></div>
-            <div class="sign-caption"><span>ลงชื่อ</span><span>วันที่</span></div>
-            <div class="sign-row"><div class="sig-blank"></div><div class="date-blank" id="outVisitDate"></div></div>
-            <div class="sign-labels"><span>(Signature)</span><span>(Visit Date)</span></div>
-          </div>
-        </div>
 
-        <div class="fvn-block">
-          <div class="fvn-head">
-            <span class="fvn-title">First Visit Note</span>
-            <span class="fvn-reason"><b>ปรึกษาแพทย์เรื่อง:</b> <span class="fvn-reason-value" id="outReason"></span></span>
-          </div>
-          <div class="back-grid">
-            <div class="back-col">
+            <div class="fvn-block">
+              <div class="fvn-head">
+                <span class="fvn-title">First Visit Note</span>
+              </div>
               <div class="qa-line"><span class="q">โรคประจำตัว</span><span class="a" id="outUnderlying"></span></div>
               <div class="qa-line"><span class="q">ยาที่ทานประจำ</span><span class="a" id="outMedication"></span></div>
               <div class="qa-line"><span class="q">แพ้ยา</span><span class="a" id="outDrugAllergy"></span></div>
               <div class="qa-line"><span class="q">อาการที่แพ้</span><span class="a" id="outAllergySymptom"></span></div>
-              <div class="qa-line"><span class="q">แพ้ยากลุ่มเฉพาะ</span><span class="a" id="outSpecificAllergy"></span></div>
-            </div>
-            <div class="back-col">
+              <div class="qa-line"><span class="q">แพ้ยาชา</span><span class="a" id="outAnestheticAllergy"></span></div>
               <div class="qa-line"><span class="q">ศัลยกรรมบนใบหน้า</span><span class="a" id="outSurgery"></span></div>
               <div class="qa-line"><span class="q">อุบัติเหตุบนใบหน้า</span><span class="a" id="outAccident"></span></div>
               <div class="qa-line"><span class="q">BOTOX</span><span class="a" id="outBotox"></span></div>
               <div class="qa-line"><span class="q">FILLER</span><span class="a" id="outFiller"></span></div>
               <div class="qa-line"><span class="q">ข้อมูลเพิ่มเติม</span><span class="a" id="outLifestyle"></span></div>
             </div>
+          </div>
+          <div class="sign-area">
+            <div class="watermark"><span>ใช้สำหรับ First Clinic เท่านั้น</span></div>
+            <div class="sign-caption"><span>ลงชื่อ</span><span>วันที่</span></div>
+            <div class="sign-row"><div class="sig-blank"></div><div class="date-blank" id="outVisitDate"></div></div>
+            <div class="sign-labels"><span>(Signature)</span><span>(Visit Date)</span></div>
           </div>
         </div>
 
@@ -681,6 +662,15 @@
     document.getElementById(id).textContent = (value && value.trim()) ? value : '—';
   }
 
+  // Printed card shows gender as a single letter rather than the full
+  // Thai word the patient picked in the form.
+  function genderLabel(g) {
+    if (g === 'ชาย') return 'M';
+    if (g === 'หญิง') return 'F';
+    if (g === 'ไม่ระบุ') return 'L';
+    return g;
+  }
+
   // "ไม่มี/มี" and "ไม่แพ้/แพ้" style radios: fold the yes/no answer and its
   // free-text detail into a single printable line, e.g. "มี: เบาหวาน".
   function yesNoDetail(flag, noVal, detail) {
@@ -701,6 +691,16 @@
     return (arr && arr.length) ? arr.join(', ') : '';
   }
 
+  // "How did you find us" is multi-select; fold the free-text detail into
+  // the "อื่นๆ" entry itself, e.g. "Instagram (IG), อื่นๆ: เพื่อนในเฟซบุ๊ก".
+  function buildFindUs(selected, otherDetail) {
+    var withOtherDetail = selected.map(function (v) {
+      if (v === 'อื่นๆ' && otherDetail && otherDetail.trim()) return 'อื่นๆ: ' + otherDetail.trim();
+      return v;
+    });
+    return joinList(withOtherDetail);
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (!form.checkValidity() || !document.getElementById('consentBox').checked) {
@@ -718,13 +718,13 @@
     var regularMedication = yesNoDetail(data.get('regularMedication'), 'ไม่มี', data.get('regularMedicationDetail'));
     var drugAllergy = yesNoDetail(data.get('drugAllergy'), 'ไม่แพ้', data.get('drugAllergyDetail'));
     var allergySymptom = data.get('allergySymptom');
-    var specificAllergy = joinList(data.getAll('specificAllergy'));
+    var anestheticAllergy = yesNoDetail(data.get('anestheticAllergy'), 'ไม่แพ้');
     var lifestyle = joinList(data.getAll('lifestyle'));
     var facialSurgery = yesNoDetail(data.get('facialSurgery'), 'ไม่เคย', data.get('facialSurgeryDetail'));
     var facialAccident = yesNoDetail(data.get('facialAccident'), 'ไม่เคย', data.get('facialAccidentDetail'));
     var botoxHistory = historyDetail(data.get('botoxHistory'), 'ไม่เคย', data.get('botoxLastDate'), data.get('botoxArea'));
     var fillerHistory = historyDetail(data.get('fillerHistory'), 'ไม่เคย', data.get('fillerLastDate'), data.get('fillerArea'));
-    var reasonForVisit = data.get('reasonForVisit');
+    var findUs = buildFindUs(data.getAll('findUs'), data.get('findUsOther'));
 
     var payload = {
       first_name: data.get('firstName'),
@@ -736,13 +736,12 @@
       email: data.get('email'),
       address: data.get('address'),
       allergy_history: data.get('allergy') || 'ไม่มี',
-      find_us: data.get('findUs'),
-      reason_for_visit: reasonForVisit,
+      find_us: findUs,
       underlying_disease: underlyingDisease,
       regular_medication: regularMedication,
       drug_allergy: drugAllergy,
       allergy_symptom: allergySymptom,
-      specific_allergy: specificAllergy,
+      anesthetic_allergy: anestheticAllergy,
       lifestyle: lifestyle,
       facial_surgery: facialSurgery,
       facial_accident: facialAccident,
@@ -768,22 +767,21 @@
 
         fill('outName', (data.get('firstName') + ' ' + data.get('lastName')).trim());
         fill('outNickname', data.get('nickname'));
-        fill('outGender', data.get('gender'));
+        fill('outGender', genderLabel(data.get('gender')));
         fill('outDob', dobVal ? formatThaiDate(new Date(dobVal)) : '');
         fill('outAge', dobVal ? String(calcAge(dobVal)) : '');
         fill('outPhone', data.get('phone'));
         fill('outEmail', data.get('email'));
         fill('outAddress', data.get('address'));
         fill('outAllergy', data.get('allergy') || 'ไม่มี');
-        fill('outFindUs', data.get('findUs'));
+        fill('outFindUs', findUs);
         fill('outVisitDate', formatThaiDate(new Date()));
 
-        fill('outReason', reasonForVisit);
         fill('outUnderlying', underlyingDisease);
         fill('outMedication', regularMedication);
         fill('outDrugAllergy', drugAllergy);
         fill('outAllergySymptom', allergySymptom);
-        fill('outSpecificAllergy', specificAllergy);
+        fill('outAnestheticAllergy', anestheticAllergy);
         fill('outLifestyle', lifestyle);
         fill('outSurgery', facialSurgery);
         fill('outAccident', facialAccident);
