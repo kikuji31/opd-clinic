@@ -109,21 +109,20 @@
     animation: riseIn .38s cubic-bezier(.2,.7,.3,1);
   }
 
-  /* ---- row 1: title + clinic badge + HN/allergy pills ---- */
-  .card-head { display: flex; align-items: stretch; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
-  .opd-title { flex: 0 0 auto; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
-  .opd-title .t1 { font-size: 2.3rem; font-weight: 800; color: var(--gold); line-height: 1; letter-spacing: -.01em; }
-  .opd-title .t2 { font-size: 1.15rem; font-weight: 800; color: var(--ink); margin-top: 4px; }
+  /* ---- row 1: clinic badge + HN/allergy pills ---- */
+  .card-head { display: flex; align-items: stretch; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
 
   .clinic-badge {
     flex: 1; min-width: 240px; background: var(--gold); color: #fff; border-radius: 14px;
-    border: 2px solid var(--ink); padding: 12px 20px; display: flex; align-items: center; gap: 14px;
+    padding: 14px 24px; display: flex; align-items: center; gap: 18px;
   }
   .brand-logo {
-    background: #fff; border-radius: 10px; padding: 8px 14px; flex-shrink: 0;
-    display: flex; align-items: center;
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 16px;
   }
-  .brand-logo img { display: block; height: 46px; width: auto; }
+  .brand-logo img { display: block; height: 68px; width: auto; }
+  .brand-logo .ascent-logo { position: relative; top: -16px; }
+  .brand-logo .logo-divider { width: 1px; height: 46px; background: rgba(255,255,255,.45); }
   .brand-text { min-width: 0; }
   .brand-text .addr { font-size: .78rem; opacity: .95; line-height: 1.45; }
 
@@ -139,21 +138,21 @@
      overflow when patients listed several allergies). */
   .allergy-banner {
     background: var(--alert-bg); border: 1.5px solid var(--alert); border-radius: 12px;
-    padding: 8px 16px; margin-bottom: 10px; font-size: .9rem;
+    padding: 6px 16px; margin-bottom: 8px; font-size: .9rem;
     display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
   }
   .allergy-banner .ab-label { font-weight: 800; color: var(--alert); flex-shrink: 0; }
   .allergy-banner .ab-value { font-weight: 700; color: var(--ink); }
 
   /* ---- row 2: bordered form box with fill-in-the-blank lines ---- */
-  .form-box { border: 2px solid var(--ink); border-radius: 16px; padding: 12px 26px 14px; margin-bottom: 10px; }
-  .line-row { display: flex; flex-wrap: wrap; gap: 10px 30px; margin-bottom: 10px; }
+  .form-box { border: 2px solid var(--ink); border-radius: 16px; padding: 9px 26px 10px; margin-bottom: 8px; }
+  .line-row { display: flex; flex-wrap: wrap; gap: 7px 30px; margin-bottom: 7px; }
   .line-row:last-child { margin-bottom: 0; }
   .line-field { flex: 1 1 140px; display: flex; align-items: baseline; gap: 8px; }
   .line-field.wide { flex-basis: 320px; }
   .line-field.mid { flex: 0 0 340px; }
   .line-field.short { flex: 0 0 auto; }
-  .lf-label { white-space: nowrap; font-weight: 700; font-size: .92rem; }
+  .lf-label { white-space: nowrap; font-weight: 400; font-size: .92rem; }
   .lf-fill {
     flex: 1; border-bottom: 1.5px solid var(--ink); min-width: 24px; min-height: 20px;
     padding: 0 5px 2px; font-weight: 700; font-size: 1rem;
@@ -173,12 +172,12 @@
 
   .sign-area {
     position: relative; overflow: hidden; border-left: 1.5px solid var(--line); padding-left: 20px;
-    display: flex; flex-direction: column; justify-content: flex-end; min-height: 24mm;
+    display: flex; flex-direction: column; justify-content: flex-end; min-height: 19mm;
   }
-  .watermark { position: absolute; inset: 0; z-index: 0; pointer-events: none; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; padding-bottom: 16px; }
+  .watermark { position: absolute; inset: 0; z-index: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; overflow: hidden; padding-bottom: 30px; }
   .watermark span {
     display: block; white-space: nowrap; transform: rotate(-18deg);
-    font-size: 1rem; font-weight: 800; letter-spacing: .04em;
+    font-size: .78rem; font-weight: 800; letter-spacing: .04em;
     color: var(--gold); opacity: .32;
   }
   .sign-row { position: relative; z-index: 1; display: flex; gap: 20px; align-items: flex-end; }
@@ -222,14 +221,32 @@
   }
 
   @media print {
-    @page { size: A5 landscape; margin: 0; }
+    /* Staff load plain A4 portrait paper and cut the sheet in half by hand
+       after printing, rather than loading A5 stock — so the page itself is
+       A4 portrait, with the card (still sized 210mm x 148mm) filling the
+       top half and the bottom half left blank to cut away. */
+    @page { size: A4 portrait; margin: 0; }
+    /* Force background colors (gold badge, allergy alert box) to print
+       even if the browser's print dialog has "Background graphics" off. */
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body * { visibility: hidden; }
     #doc, #doc * { visibility: visible; }
     #doc { display: block !important; position: absolute; top: 0; left: 0; width: 100%; max-width: none; padding: 0; }
     .handoff, .doc-actions { display: none !important; }
     .page-shell { padding: 0; }
-    .paper { box-shadow: none; width: 210mm; min-height: 148mm; padding: 3mm 5mm; margin: 0; animation: none; overflow: visible; }
+    .paper {
+      box-shadow: none; width: 210mm; height: 148mm; padding: 5mm 5mm 2mm; margin: 0;
+      animation: none; overflow: hidden; display: flex; flex-direction: column;
+    }
     body { background: #fff; }
+
+    /* Stretch split-area down to the paper's bottom edge (instead of
+       stopping wherever "how did you find us" content ends), so sign-area's
+       existing justify-content:flex-end pushes signature/date to sit right
+       at the bottom — clear of where staff lay a photocopied ID card on top
+       after printing. This also keeps the divider line between the two
+       columns running the full height, same as the on-screen layout. */
+    .split-area { flex: 1; }
   }
 </style>
 </head>
@@ -421,14 +438,14 @@
       <div class="paper">
 
         <div class="card-head">
-          <div class="opd-title">
-            <span class="t1">OPD Card</span>
-            <span class="t2">เวชระเบียน</span>
-          </div>
           <div class="clinic-badge">
-            <div class="brand-logo"><img src="logo.png" alt="First Clinic"></div>
+            <div class="brand-logo">
+              <img src="logo-white.png" alt="First Clinic">
+              <span class="logo-divider"></span>
+              <img src="ascent-logo.png" alt="ASCENT" class="ascent-logo">
+            </div>
             <div class="brand-text">
-              <div class="addr">555/19 อาคาร Taka Town ชั้น 2 ถ.สุขุมวิท 39 · โทร. 094-409-4449, 092-808-8088 · LINE: @firstclinic</div>
+              <div class="addr">555/19 อาคาร Taka Town ชั้น 2 ถ.สุขุมวิท 39 · โทร. 094-409-4449 · <span style="white-space:nowrap;">LINE: @firstclinic</span></div>
             </div>
           </div>
           <div class="id-pills">
@@ -493,7 +510,7 @@
 
 <script>
 (function () {
-  var STAFF_PIN = '1234'; // TODO: เจ้าหน้าที่คลินิกควรเปลี่ยนรหัสนี้ก่อนใช้งานจริง
+  var STAFF_PIN = '1111'; // เปลี่ยนรหัสนี้ได้ตามต้องการ — เจ้าหน้าที่หน้าเคาน์เตอร์ใช้ปลดล็อกการพิมพ์เท่านั้น
 
   var form = document.getElementById('patientForm');
   var formView = document.getElementById('formView');
@@ -546,6 +563,7 @@
       email: data.get('email'),
       address: data.get('address'),
       allergy_history: data.get('allergy') || 'ไม่มี',
+      find_us: data.get('findUs'),
     };
 
     submitBtn.disabled = true;
