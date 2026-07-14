@@ -29,6 +29,7 @@ app.post('/api/patients', async (req, res) => {
     phone,
     email,
     address,
+    country,
     allergy_history,
     find_us,
     underlying_disease,
@@ -87,6 +88,7 @@ app.post('/api/patients', async (req, res) => {
     try {
       const html = renderCardHtml({
         ...patient,
+        country,
         find_us,
         underlying_disease,
         regular_medication,

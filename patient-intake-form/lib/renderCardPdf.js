@@ -72,6 +72,7 @@ function renderCardHtml(patient) {
   docHtml = fillSpan(docHtml, 'outDob', dobDate ? formatThaiDate(dobDate) : '');
   docHtml = fillSpan(docHtml, 'outAge', dobDate ? String(calcAge(dobVal)) : '');
   docHtml = fillSpan(docHtml, 'outAddress', patient.address);
+  docHtml = fillSpan(docHtml, 'outCountry', patient.country);
   docHtml = fillSpan(docHtml, 'outPhone', patient.phone);
   docHtml = fillSpan(docHtml, 'outEmail', patient.email);
   docHtml = fillSpan(docHtml, 'outAllergy', patient.allergy_history || 'ไม่มี');

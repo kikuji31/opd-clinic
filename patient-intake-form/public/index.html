@@ -300,6 +300,10 @@
           <div class="field"><label>เบอร์โทรศัพท์ <span class="en">Phone</span><span class="req">*</span></label><input type="tel" name="phone" required></div>
           <div class="field"><label>อีเมล <span class="en">Email</span><span class="req">*</span></label><input type="email" name="email" required></div>
         </div>
+        <div class="field" style="margin-bottom:20px;">
+          <label>ประเทศ <span class="en">Country</span></label>
+          <input type="text" name="country" placeholder="เช่น ไทย, Japan, USA" value="ไทย">
+        </div>
         <div class="field">
           <label>ที่อยู่ปัจจุบัน (จังหวัด) <span class="en">Current address (Province)</span></label>
           <select name="address">
@@ -565,6 +569,7 @@
           </div>
           <div class="line-row">
             <div class="line-field"><span class="lf-label">อีเมลล์ (E-Mail):</span><span class="lf-fill" id="outEmail"></span></div>
+            <div class="line-field mid"><span class="lf-label">ประเทศ (Country):</span><span class="lf-fill" id="outCountry"></span></div>
           </div>
         </div>
 
@@ -716,6 +721,7 @@
       phone: data.get('phone'),
       email: data.get('email'),
       address: data.get('address'),
+      country: data.get('country'),
       allergy_history: data.get('allergy') || 'ไม่มี',
       find_us: findUs,
       underlying_disease: underlyingDisease,
@@ -752,6 +758,7 @@
         fill('outPhone', data.get('phone'));
         fill('outEmail', data.get('email'));
         fill('outAddress', data.get('address'));
+        fill('outCountry', data.get('country'));
         fill('outAllergy', data.get('allergy') || 'ไม่มี');
         fill('outFindUs', findUs);
         fill('outVisitDate', formatThaiDate(new Date()));
