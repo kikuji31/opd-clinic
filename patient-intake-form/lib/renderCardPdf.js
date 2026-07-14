@@ -80,7 +80,6 @@ function renderCardHtml(patient) {
 
   docHtml = fillSpan(docHtml, 'outUnderlying', patient.underlying_disease);
   docHtml = fillSpan(docHtml, 'outMedication', patient.regular_medication);
-  docHtml = fillSpan(docHtml, 'outAllergySymptom', patient.allergy_symptom);
   docHtml = fillSpan(docHtml, 'outAnestheticAllergy', patient.anesthetic_allergy);
   docHtml = fillSpan(docHtml, 'outLifestyle', patient.lifestyle);
   docHtml = fillSpan(docHtml, 'outSurgery', patient.facial_surgery);

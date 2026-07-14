@@ -416,11 +416,6 @@
         </div>
 
         <div class="field" style="margin-bottom:20px;">
-          <label>อาการที่แพ้ <span class="en">Allergy symptoms</span></label>
-          <input type="text" name="allergySymptom" placeholder="เช่น ผื่นคัน, หายใจลำบาก">
-        </div>
-
-        <div class="field" style="margin-bottom:20px;">
           <label>แพ้ยาชาไหม <span class="en">Allergic to local anesthetic</span></label>
           <div class="choice-row">
             <label><input type="radio" name="anestheticAllergy" value="ไม่แพ้" checked> ไม่แพ้</label>
@@ -587,7 +582,6 @@
               </div>
               <div class="qa-line"><span class="q">โรคประจำตัว</span><span class="a" id="outUnderlying"></span></div>
               <div class="qa-line"><span class="q">ยาที่ทานประจำ</span><span class="a" id="outMedication"></span></div>
-              <div class="qa-line"><span class="q">อาการที่แพ้</span><span class="a" id="outAllergySymptom"></span></div>
               <div class="qa-line"><span class="q">แพ้ยาชา</span><span class="a" id="outAnestheticAllergy"></span></div>
               <div class="qa-line"><span class="q">ศัลยกรรมบนใบหน้า</span><span class="a" id="outSurgery"></span></div>
               <div class="qa-line"><span class="q">อุบัติเหตุบนใบหน้า</span><span class="a" id="outAccident"></span></div>
@@ -705,7 +699,6 @@
 
     var underlyingDisease = yesNoDetail(data.get('underlyingDisease'), 'ไม่มี', data.get('underlyingDiseaseDetail'));
     var regularMedication = yesNoDetail(data.get('regularMedication'), 'ไม่มี', data.get('regularMedicationDetail'));
-    var allergySymptom = data.get('allergySymptom');
     var anestheticAllergy = yesNoDetail(data.get('anestheticAllergy'), 'ไม่แพ้');
     var lifestyle = joinList(data.getAll('lifestyle'));
     var facialSurgery = yesNoDetail(data.get('facialSurgery'), 'ไม่เคย', data.get('facialSurgeryDetail'));
@@ -727,7 +720,6 @@
       find_us: findUs,
       underlying_disease: underlyingDisease,
       regular_medication: regularMedication,
-      allergy_symptom: allergySymptom,
       anesthetic_allergy: anestheticAllergy,
       lifestyle: lifestyle,
       facial_surgery: facialSurgery,
@@ -766,7 +758,6 @@
 
         fill('outUnderlying', underlyingDisease);
         fill('outMedication', regularMedication);
-        fill('outAllergySymptom', allergySymptom);
         fill('outAnestheticAllergy', anestheticAllergy);
         fill('outLifestyle', lifestyle);
         fill('outSurgery', facialSurgery);
