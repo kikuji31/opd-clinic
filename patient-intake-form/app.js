@@ -41,8 +41,8 @@ app.post('/api/patients', async (req, res) => {
     filler_history,
   } = req.body;
 
-  if (!first_name || !last_name || !phone) {
-    return res.status(400).json({ error: 'กรุณากรอกชื่อ, นามสกุล และเบอร์โทรให้ครบถ้วน' });
+  if (!first_name || !last_name || !phone || !email) {
+    return res.status(400).json({ error: 'กรุณากรอกชื่อ, นามสกุล, เบอร์โทร และอีเมลให้ครบถ้วน' });
   }
 
   const client = await pool.connect();
