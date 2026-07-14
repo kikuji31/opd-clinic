@@ -2,6 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const { Pool } = require('pg');
+const { renderCardHtml } = require('./lib/renderCardPdf');
+const { htmlToPdf } = require('./lib/generatePdf');
+const { uploadPdf } = require('./lib/uploadToDrive');
 
 const app = express();
 
@@ -27,6 +30,19 @@ app.post('/api/patients', async (req, res) => {
     email,
     address,
     allergy_history,
+    find_us,
+    reason_for_visit,
+    underlying_disease,
+    regular_medication,
+    drug_allergy,
+    allergy_symptom,
+    specific_allergy,
+    lifestyle,
+    facial_surgery,
+    facial_accident,
+    botox_history,
+    filler_history,
+    thread_lift_history,
   } = req.body;
 
   if (!first_name || !last_name || !phone) {
@@ -66,7 +82,37 @@ app.post('/api/patients', async (req, res) => {
     );
 
     await client.query('COMMIT');
-    res.status(201).json({ patient: insertResult.rows[0] });
+    const patient = insertResult.rows[0];
+
+    // Must run before responding: Vercel serverless functions freeze right
+    // after the response is sent, so "fire and forget" work here would not
+    // reliably finish. Registration itself must not fail because of this,
+    // so a Drive/PDF error is logged rather than surfaced to the patient.
+    try {
+      const html = renderCardHtml({
+        ...patient,
+        find_us,
+        reason_for_visit,
+        underlying_disease,
+        regular_medication,
+        drug_allergy,
+        allergy_symptom,
+        specific_allergy,
+        lifestyle,
+        facial_surgery,
+        facial_accident,
+        botox_history,
+        filler_history,
+        thread_lift_history,
+      });
+      const pdf = await htmlToPdf(html);
+      const safeName = `${patient.first_name}_${patient.last_name}`.replace(/[\\/:*?"<>|]/g, '');
+      await uploadPdf(pdf, `${patient.hn_code}_${safeName}.pdf`);
+    } catch (uploadErr) {
+      console.error('Google Drive upload failed:', uploadErr);
+    }
+
+    res.status(201).json({ patient });
   } catch (err) {
     await client.query('ROLLBACK');
     console.error(err);

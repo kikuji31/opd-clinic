@@ -182,7 +182,7 @@
   }
   .sign-row { position: relative; z-index: 1; display: flex; gap: 20px; align-items: flex-end; }
   .sig-blank { flex: 1.4; border-bottom: 1.5px solid var(--ink); min-height: 22px; }
-  .date-blank { flex: 1; border-bottom: 1.5px solid var(--ink); min-height: 22px; }
+  .date-blank { flex: 1; border-bottom: 1.5px solid var(--ink); min-height: 22px; text-align: center; font-weight: 700; font-size: .95rem; padding-bottom: 2px; }
   .sign-labels { position: relative; z-index: 1; display: flex; gap: 20px; margin-top: 4px; }
   .sign-labels span { font-size: .78rem; color: var(--ink-soft); }
   .sign-labels span:first-child { flex: 1.4; text-align: center; }
@@ -190,6 +190,15 @@
   .sign-caption { position: relative; z-index: 1; display: flex; gap: 20px; margin-bottom: 8px; }
   .sign-caption span:first-child { flex: 1.4; font-size: .95rem; font-weight: 700; }
   .sign-caption span:last-child { flex: 1; font-size: .95rem; font-weight: 700; }
+
+  /* ---- back page: OPD First Visit Note (medical/procedure history) ---- */
+  .back-note-title { font-size: 1.3rem; font-weight: 800; color: var(--gold); letter-spacing: -.01em; display: block; }
+  .back-note-sub { font-size: .8rem; color: var(--ink-faint); display: block; margin-top: 2px; }
+  .back-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; }
+  .qa-line { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+  .qa-line:last-child { border-bottom: none; }
+  .qa-line .q { flex: 0 0 auto; font-weight: 700; font-size: .86rem; color: var(--ink); }
+  .qa-line .a { flex: 1; font-size: .86rem; color: var(--ink-soft); text-align: right; font-weight: 600; }
 
   /* ---- staff-only print gate ---- */
   .doc-actions { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 22px; }
@@ -218,6 +227,7 @@
     .line-field, .line-field.short, .line-field.wide, .line-field.mid { flex: 0 0 auto; flex-basis: auto; width: 100%; }
     .split-area { grid-template-columns: 1fr; }
     .sign-area { border-left: none; border-top: 1.5px solid var(--line); padding-left: 0; padding-top: 16px; margin-top: 4px; }
+    .back-grid { grid-template-columns: 1fr; }
   }
 
   @media print {
@@ -247,6 +257,11 @@
        after printing. This also keeps the divider line between the two
        columns running the full height, same as the on-screen layout. */
     .split-area { flex: 1; }
+
+    /* Back page (First Visit Note) prints as its own physical sheet —
+       staff duplex-print this job so it lands on the reverse of the front
+       card, then cut both sheets in half together. */
+    .page-shell.back { break-before: page; page-break-before: always; }
   }
 </style>
 </head>
@@ -392,6 +407,130 @@
       </div>
 
       <div class="part">
+        <span class="part-label">ข้อมูลสำหรับแพทย์ <span class="en">First Visit Note</span></span>
+
+        <div class="field" style="margin-bottom:20px;">
+          <label>ปรึกษาแพทย์เรื่อง <span class="en">Reason for consultation</span></label>
+          <textarea name="reasonForVisit" placeholder="เช่น ต้องการปรึกษาเรื่อง Botox, Filler, ปัญหาผิวหน้า ฯลฯ"></textarea>
+        </div>
+
+        <div class="row" style="margin-bottom:20px;">
+          <div class="field">
+            <label>โรคประจำตัว <span class="en">Underlying disease</span></label>
+            <div class="choice-row">
+              <label><input type="radio" name="underlyingDisease" value="ไม่มี" checked> ไม่มี</label>
+              <label><input type="radio" name="underlyingDisease" value="มี"> มี</label>
+            </div>
+            <input type="text" name="underlyingDiseaseDetail" placeholder="ระบุโรคประจำตัว (ถ้ามี)" style="margin-top:8px;">
+          </div>
+          <div class="field">
+            <label>ยาที่ทานประจำ <span class="en">Regular medication</span></label>
+            <div class="choice-row">
+              <label><input type="radio" name="regularMedication" value="ไม่มี" checked> ไม่มี</label>
+              <label><input type="radio" name="regularMedication" value="มี"> มี</label>
+            </div>
+            <input type="text" name="regularMedicationDetail" placeholder="ระบุยาที่ทานประจำ (ถ้ามี)" style="margin-top:8px;">
+          </div>
+        </div>
+
+        <div class="row" style="margin-bottom:20px;">
+          <div class="field">
+            <label>แพ้ยา <span class="en">Drug allergy</span></label>
+            <div class="choice-row">
+              <label><input type="radio" name="drugAllergy" value="ไม่แพ้" checked> ไม่แพ้</label>
+              <label><input type="radio" name="drugAllergy" value="แพ้"> แพ้</label>
+            </div>
+            <input type="text" name="drugAllergyDetail" placeholder="ระบุชื่อยาที่แพ้ (ถ้ามี)" style="margin-top:8px;">
+          </div>
+          <div class="field">
+            <label>อาการที่แพ้ <span class="en">Allergy symptoms</span></label>
+            <input type="text" name="allergySymptom" placeholder="เช่น ผื่นคัน, หายใจลำบาก">
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:20px;">
+          <label>แพ้ยากลุ่มนี้หรือไม่ <span class="en">Specific drug allergy</span></label>
+          <div class="choice-row">
+            <label><input type="checkbox" name="specificAllergy" value="Amoxicillin"> Amoxicillin</label>
+            <label><input type="checkbox" name="specificAllergy" value="Rulid/Roxithromycin"> Rulid/Roxithromycin</label>
+            <label><input type="checkbox" name="specificAllergy" value="ยาชา"> ยาชา <span class="en">Local anesthetic</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>ข้อมูลเพิ่มเติม <span class="en">Additional information</span></label>
+          <div class="choice-row">
+            <label><input type="checkbox" name="lifestyle" value="ตั้งครรภ์"> ตั้งครรภ์ <span class="en">Pregnant</span></label>
+            <label><input type="checkbox" name="lifestyle" value="ให้นมบุตร"> ให้นมบุตร <span class="en">Breastfeeding</span></label>
+            <label><input type="checkbox" name="lifestyle" value="วางแผนจะมีบุตร"> วางแผนจะมีบุตร <span class="en">Planning pregnancy</span></label>
+            <label><input type="checkbox" name="lifestyle" value="สูบบุหรี่"> สูบบุหรี่ <span class="en">Smoking</span></label>
+            <label><input type="checkbox" name="lifestyle" value="ดื่มสุรา"> ดื่มสุรา <span class="en">Alcohol</span></label>
+            <label><input type="checkbox" name="lifestyle" value="ทานอาหารเสริม"> ทานอาหารเสริม <span class="en">Supplements</span></label>
+            <label><input type="checkbox" name="lifestyle" value="ใช้ครีมบำรุง"> ใช้ครีมบำรุง <span class="en">Skincare products</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="part">
+        <span class="part-label">ประวัติหัตถการบนใบหน้า <span class="en">Facial Procedure History</span></span>
+
+        <div class="row" style="margin-bottom:20px;">
+          <div class="field">
+            <label>ศัลยกรรมบนใบหน้า <span class="en">Facial surgery</span></label>
+            <div class="choice-row">
+              <label><input type="radio" name="facialSurgery" value="ไม่เคย" checked> ไม่เคย</label>
+              <label><input type="radio" name="facialSurgery" value="เคย"> เคย</label>
+            </div>
+            <input type="text" name="facialSurgeryDetail" placeholder="ระบุ (ถ้าเคย)" style="margin-top:8px;">
+          </div>
+          <div class="field">
+            <label>อุบัติเหตุบนใบหน้า <span class="en">Facial accident</span></label>
+            <div class="choice-row">
+              <label><input type="radio" name="facialAccident" value="ไม่เคย" checked> ไม่เคย</label>
+              <label><input type="radio" name="facialAccident" value="เคย"> เคย</label>
+            </div>
+            <input type="text" name="facialAccidentDetail" placeholder="ระบุ (ถ้าเคย)" style="margin-top:8px;">
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:20px;">
+          <label>BOTOX</label>
+          <div class="choice-row" style="margin-bottom:10px;">
+            <label><input type="radio" name="botoxHistory" value="ไม่เคย" checked> ไม่เคย</label>
+            <label><input type="radio" name="botoxHistory" value="เคย"> เคยล่าสุด</label>
+          </div>
+          <div class="row">
+            <div class="field"><label>เคยล่าสุดเมื่อ</label><input type="text" name="botoxLastDate" placeholder="เช่น ม.ค. 2569"></div>
+            <div class="field"><label>บริเวณ</label><input type="text" name="botoxArea" placeholder="เช่น หน้าผาก, หางตา"></div>
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:20px;">
+          <label>FILLER</label>
+          <div class="choice-row" style="margin-bottom:10px;">
+            <label><input type="radio" name="fillerHistory" value="ไม่เคย" checked> ไม่เคย</label>
+            <label><input type="radio" name="fillerHistory" value="เคย"> เคยล่าสุด</label>
+          </div>
+          <div class="row">
+            <div class="field"><label>เคยล่าสุดเมื่อ</label><input type="text" name="fillerLastDate" placeholder="เช่น ม.ค. 2569"></div>
+            <div class="field"><label>บริเวณ</label><input type="text" name="fillerArea" placeholder="เช่น ใต้ตา, ปาก"></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>ร้อยไหม <span class="en">Thread lift</span></label>
+          <div class="choice-row" style="margin-bottom:10px;">
+            <label><input type="radio" name="threadLiftHistory" value="ไม่เคย" checked> ไม่เคย</label>
+            <label><input type="radio" name="threadLiftHistory" value="เคย"> เคยล่าสุด</label>
+          </div>
+          <div class="row">
+            <div class="field"><label>เคยล่าสุดเมื่อ</label><input type="text" name="threadLiftLastDate" placeholder="เช่น ม.ค. 2569"></div>
+            <div class="field"><label>บริเวณ</label><input type="text" name="threadLiftArea" placeholder="เช่น แก้ม, กราม"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="part">
         <span class="part-label">รู้จัก First Clinic จากไหน <span class="en">How did you find First Clinic?</span></span>
         <div class="choice-row">
           <label><input type="radio" name="findUs" value="Facebook"> Facebook</label>
@@ -488,8 +627,49 @@
           <div class="sign-area">
             <div class="watermark"><span>ใช้สำหรับ First Clinic เท่านั้น</span></div>
             <div class="sign-caption"><span>ลงชื่อ</span><span>วันที่</span></div>
-            <div class="sign-row"><div class="sig-blank"></div><div class="date-blank"></div></div>
+            <div class="sign-row"><div class="sig-blank"></div><div class="date-blank" id="outVisitDate"></div></div>
             <div class="sign-labels"><span>(Signature)</span><span>(Visit Date)</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="page-shell back">
+      <div class="paper">
+
+        <div style="margin-bottom:14px;">
+          <span class="back-note-title">OPD First Visit Note</span>
+          <span class="back-note-sub">บันทึกการซักประวัติครั้งแรก · เก็บไว้เป็นข้อมูลด้านหลังบัตร OPD</span>
+        </div>
+
+        <div class="form-box" style="margin-bottom:10px;">
+          <div class="line-row">
+            <div class="line-field wide"><span class="lf-label">ชื่อ-นามสกุล:</span><span class="lf-fill" id="outNameBack"></span></div>
+            <div class="line-field short"><span class="lf-label">วันที่:</span><span class="lf-fill fixed" id="outVisitDateBack"></span></div>
+          </div>
+          <div class="line-row">
+            <div class="line-field"><span class="lf-label">ปรึกษาแพทย์เรื่อง:</span><span class="lf-fill" id="outReason"></span></div>
+          </div>
+        </div>
+
+        <div class="form-box">
+          <div class="back-grid">
+            <div class="back-col">
+              <div class="qa-line"><span class="q">โรคประจำตัว</span><span class="a" id="outUnderlying"></span></div>
+              <div class="qa-line"><span class="q">ยาที่ทานประจำ</span><span class="a" id="outMedication"></span></div>
+              <div class="qa-line"><span class="q">แพ้ยา</span><span class="a" id="outDrugAllergy"></span></div>
+              <div class="qa-line"><span class="q">อาการที่แพ้</span><span class="a" id="outAllergySymptom"></span></div>
+              <div class="qa-line"><span class="q">แพ้ยากลุ่มเฉพาะ</span><span class="a" id="outSpecificAllergy"></span></div>
+              <div class="qa-line"><span class="q">ข้อมูลเพิ่มเติม</span><span class="a" id="outLifestyle"></span></div>
+            </div>
+            <div class="back-col">
+              <div class="qa-line"><span class="q">ศัลยกรรมบนใบหน้า</span><span class="a" id="outSurgery"></span></div>
+              <div class="qa-line"><span class="q">อุบัติเหตุบนใบหน้า</span><span class="a" id="outAccident"></span></div>
+              <div class="qa-line"><span class="q">BOTOX</span><span class="a" id="outBotox"></span></div>
+              <div class="qa-line"><span class="q">FILLER</span><span class="a" id="outFiller"></span></div>
+              <div class="qa-line"><span class="q">ร้อยไหม</span><span class="a" id="outThreadLift"></span></div>
+            </div>
           </div>
         </div>
 
@@ -540,6 +720,26 @@
     document.getElementById(id).textContent = (value && value.trim()) ? value : '—';
   }
 
+  // "ไม่มี/มี" and "ไม่แพ้/แพ้" style radios: fold the yes/no answer and its
+  // free-text detail into a single printable line, e.g. "มี: เบาหวาน".
+  function yesNoDetail(flag, noVal, detail) {
+    if (flag === noVal) return noVal;
+    return (detail && detail.trim()) ? (flag + ': ' + detail.trim()) : flag;
+  }
+
+  // Botox/Filler/thread-lift: "ไม่เคย" or "เคย (ล่าสุด ... · บริเวณ ...)".
+  function historyDetail(flag, noVal, lastDate, area) {
+    if (flag === noVal) return noVal;
+    var parts = [];
+    if (lastDate && lastDate.trim()) parts.push('ล่าสุด ' + lastDate.trim());
+    if (area && area.trim()) parts.push('บริเวณ ' + area.trim());
+    return flag + (parts.length ? ' (' + parts.join(' · ') + ')' : '');
+  }
+
+  function joinList(arr) {
+    return (arr && arr.length) ? arr.join(', ') : '';
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (!form.checkValidity() || !document.getElementById('consentBox').checked) {
@@ -553,6 +753,19 @@
     var data = new FormData(form);
     var dobVal = data.get('dob');
 
+    var underlyingDisease = yesNoDetail(data.get('underlyingDisease'), 'ไม่มี', data.get('underlyingDiseaseDetail'));
+    var regularMedication = yesNoDetail(data.get('regularMedication'), 'ไม่มี', data.get('regularMedicationDetail'));
+    var drugAllergy = yesNoDetail(data.get('drugAllergy'), 'ไม่แพ้', data.get('drugAllergyDetail'));
+    var allergySymptom = data.get('allergySymptom');
+    var specificAllergy = joinList(data.getAll('specificAllergy'));
+    var lifestyle = joinList(data.getAll('lifestyle'));
+    var facialSurgery = yesNoDetail(data.get('facialSurgery'), 'ไม่เคย', data.get('facialSurgeryDetail'));
+    var facialAccident = yesNoDetail(data.get('facialAccident'), 'ไม่เคย', data.get('facialAccidentDetail'));
+    var botoxHistory = historyDetail(data.get('botoxHistory'), 'ไม่เคย', data.get('botoxLastDate'), data.get('botoxArea'));
+    var fillerHistory = historyDetail(data.get('fillerHistory'), 'ไม่เคย', data.get('fillerLastDate'), data.get('fillerArea'));
+    var threadLiftHistory = historyDetail(data.get('threadLiftHistory'), 'ไม่เคย', data.get('threadLiftLastDate'), data.get('threadLiftArea'));
+    var reasonForVisit = data.get('reasonForVisit');
+
     var payload = {
       first_name: data.get('firstName'),
       last_name: data.get('lastName'),
@@ -564,6 +777,18 @@
       address: data.get('address'),
       allergy_history: data.get('allergy') || 'ไม่มี',
       find_us: data.get('findUs'),
+      reason_for_visit: reasonForVisit,
+      underlying_disease: underlyingDisease,
+      regular_medication: regularMedication,
+      drug_allergy: drugAllergy,
+      allergy_symptom: allergySymptom,
+      specific_allergy: specificAllergy,
+      lifestyle: lifestyle,
+      facial_surgery: facialSurgery,
+      facial_accident: facialAccident,
+      botox_history: botoxHistory,
+      filler_history: fillerHistory,
+      thread_lift_history: threadLiftHistory,
     };
 
     submitBtn.disabled = true;
@@ -592,6 +817,22 @@
         fill('outAddress', data.get('address'));
         fill('outAllergy', data.get('allergy') || 'ไม่มี');
         fill('outFindUs', data.get('findUs'));
+        fill('outVisitDate', formatThaiDate(new Date()));
+
+        fill('outNameBack', (data.get('firstName') + ' ' + data.get('lastName')).trim());
+        fill('outVisitDateBack', formatThaiDate(new Date()));
+        fill('outReason', reasonForVisit);
+        fill('outUnderlying', underlyingDisease);
+        fill('outMedication', regularMedication);
+        fill('outDrugAllergy', drugAllergy);
+        fill('outAllergySymptom', allergySymptom);
+        fill('outSpecificAllergy', specificAllergy);
+        fill('outLifestyle', lifestyle);
+        fill('outSurgery', facialSurgery);
+        fill('outAccident', facialAccident);
+        fill('outBotox', botoxHistory);
+        fill('outFiller', fillerHistory);
+        fill('outThreadLift', threadLiftHistory);
 
         formView.style.display = 'none';
         doc.style.display = 'block';
