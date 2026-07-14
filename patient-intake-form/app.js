@@ -42,7 +42,6 @@ app.post('/api/patients', async (req, res) => {
     facial_accident,
     botox_history,
     filler_history,
-    thread_lift_history,
   } = req.body;
 
   if (!first_name || !last_name || !phone) {
@@ -103,7 +102,6 @@ app.post('/api/patients', async (req, res) => {
         facial_accident,
         botox_history,
         filler_history,
-        thread_lift_history,
       });
       const pdf = await htmlToPdf(html);
       const safeName = `${patient.first_name}_${patient.last_name}`.replace(/[\\/:*?"<>|]/g, '');

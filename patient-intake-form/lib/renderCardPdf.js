@@ -69,8 +69,6 @@ function renderCardHtml(patient) {
   docHtml = fillSpan(docHtml, 'outFindUs', patient.find_us);
   docHtml = fillSpan(docHtml, 'outVisitDate', formatThaiDate(new Date()));
 
-  docHtml = fillSpan(docHtml, 'outNameBack', `${patient.first_name || ''} ${patient.last_name || ''}`.trim());
-  docHtml = fillSpan(docHtml, 'outVisitDateBack', formatThaiDate(new Date()));
   docHtml = fillSpan(docHtml, 'outReason', patient.reason_for_visit);
   docHtml = fillSpan(docHtml, 'outUnderlying', patient.underlying_disease);
   docHtml = fillSpan(docHtml, 'outMedication', patient.regular_medication);
@@ -82,7 +80,6 @@ function renderCardHtml(patient) {
   docHtml = fillSpan(docHtml, 'outAccident', patient.facial_accident);
   docHtml = fillSpan(docHtml, 'outBotox', patient.botox_history);
   docHtml = fillSpan(docHtml, 'outFiller', patient.filler_history);
-  docHtml = fillSpan(docHtml, 'outThreadLift', patient.thread_lift_history);
 
   // The serverless Chromium used to render this on Vercel ships with no
   // Thai-capable fonts at all, so Thai text (most of this card) would

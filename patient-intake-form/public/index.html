@@ -110,95 +110,99 @@
   }
 
   /* ---- row 1: clinic badge + HN/allergy pills ---- */
-  .card-head { display: flex; align-items: stretch; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
+  .card-head { display: flex; align-items: stretch; gap: 16px; margin-bottom: 6px; flex-wrap: wrap; }
 
   .clinic-badge {
     flex: 1; min-width: 240px; background: var(--gold); color: #fff; border-radius: 14px;
-    padding: 14px 24px; display: flex; align-items: center; gap: 18px;
+    padding: 10px 20px; display: flex; align-items: center; gap: 14px;
   }
   .brand-logo {
     flex-shrink: 0;
-    display: flex; align-items: center; gap: 16px;
+    display: flex; align-items: center; gap: 12px;
   }
-  .brand-logo img { display: block; height: 68px; width: auto; }
-  .brand-logo .ascent-logo { position: relative; top: -16px; }
-  .brand-logo .logo-divider { width: 1px; height: 46px; background: rgba(255,255,255,.45); }
+  .brand-logo img { display: block; height: 52px; width: auto; }
+  .brand-logo .ascent-logo { position: relative; top: -12px; }
+  .brand-logo .logo-divider { width: 1px; height: 36px; background: rgba(255,255,255,.45); }
   .brand-text { min-width: 0; }
-  .brand-text .addr { font-size: .78rem; opacity: .95; line-height: 1.45; }
+  .brand-text .addr { font-size: .74rem; opacity: .95; line-height: 1.4; }
 
   .id-pills { flex: 0 0 auto; width: 44mm; display: flex; flex-direction: column; gap: 8px; }
   .id-pill {
-    border: 1.6px solid var(--gold); border-radius: 999px; padding: 6px 18px;
-    font-size: .82rem; font-weight: 700; color: var(--gold-deep); background: var(--surface);
+    border: 1.6px solid var(--gold); border-radius: 999px; padding: 6px 16px;
+    font-size: .8rem; font-weight: 700; color: var(--gold-deep); background: var(--surface);
   }
-  .id-pill .pv { display: block; font-size: 1rem; font-weight: 800; color: var(--ink); min-height: 18px; margin-top: 2px; }
+  .id-pill .pv { display: block; font-size: 1rem; font-weight: 800; color: var(--ink); min-height: 17px; margin-top: 1px; }
 
   /* Allergy is safety-critical and can run long, so it gets its own
      full-width callout instead of a fixed-size pill (which used to
      overflow when patients listed several allergies). */
   .allergy-banner {
     background: var(--alert-bg); border: 1.5px solid var(--alert); border-radius: 12px;
-    padding: 6px 16px; margin-bottom: 8px; font-size: .9rem;
+    padding: 5px 16px; margin-bottom: 6px; font-size: .86rem;
     display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
   }
   .allergy-banner .ab-label { font-weight: 800; color: var(--alert); flex-shrink: 0; }
   .allergy-banner .ab-value { font-weight: 700; color: var(--ink); }
 
   /* ---- row 2: bordered form box with fill-in-the-blank lines ---- */
-  .form-box { border: 2px solid var(--ink); border-radius: 16px; padding: 9px 26px 10px; margin-bottom: 8px; }
-  .line-row { display: flex; flex-wrap: wrap; gap: 7px 30px; margin-bottom: 7px; }
+  .form-box { border: 2px solid var(--ink); border-radius: 14px; padding: 7px 22px 8px; margin-bottom: 6px; }
+  .line-row { display: flex; flex-wrap: wrap; gap: 4px 24px; margin-bottom: 4px; }
   .line-row:last-child { margin-bottom: 0; }
-  .line-field { flex: 1 1 140px; display: flex; align-items: baseline; gap: 8px; }
+  .line-field { flex: 1 1 140px; display: flex; align-items: baseline; gap: 6px; }
   .line-field.wide { flex-basis: 320px; }
   .line-field.mid { flex: 0 0 340px; }
   .line-field.short { flex: 0 0 auto; }
-  .lf-label { white-space: nowrap; font-weight: 400; font-size: .92rem; }
+  .lf-label { white-space: nowrap; font-weight: 400; font-size: .84rem; }
   .lf-fill {
-    flex: 1; border-bottom: 1.5px solid var(--ink); min-width: 24px; min-height: 20px;
-    padding: 0 5px 2px; font-weight: 700; font-size: 1rem;
+    flex: 1; border-bottom: 1.5px solid var(--ink); min-width: 24px; min-height: 18px;
+    padding: 0 5px 1px; font-weight: 700; font-size: .9rem;
   }
   .lf-fill.fixed { flex: 0 0 auto; width: 22mm; text-align: center; }
-  .lf-suffix { font-size: .92rem; font-weight: 600; }
+  .lf-suffix { font-size: .84rem; font-weight: 600; }
 
   /* ---- row 3: referral source + signature/watermark split ---- */
-  .split-area { display: grid; grid-template-columns: 1.25fr 1fr; gap: 0; margin-bottom: 10px; }
+  .split-area { display: grid; grid-template-columns: 1.25fr 1fr; gap: 0; margin-bottom: 6px; }
   .find-block { padding-right: 20px; }
-  .find-block h4 { font-size: 1.05rem; font-weight: 800; margin-bottom: 4px; }
+  .find-block h4 { font-size: .88rem; font-weight: 800; margin-bottom: 2px; }
   .find-block h4 em { font-style: normal; color: var(--gold-deep); }
-  .find-block .fq { font-size: .92rem; font-weight: 600; margin-bottom: 3px; }
-  .find-line { border-bottom: 1.5px solid var(--ink); min-height: 20px; font-weight: 800; font-size: 1.02rem; padding: 0 3px 2px; margin-bottom: 8px; }
-  .priv-label { font-size: .92rem; font-weight: 700; margin-bottom: 3px; }
-  .priv-line { border-bottom: 1.5px solid var(--ink); min-height: 22px; }
+  .find-block .fq { font-size: .78rem; font-weight: 600; margin-bottom: 2px; }
+  .find-line { border-bottom: 1.5px solid var(--ink); min-height: 17px; font-weight: 800; font-size: .86rem; padding: 0 3px 1px; margin-bottom: 4px; }
+  .priv-label { font-size: .78rem; font-weight: 700; margin-bottom: 2px; }
+  .priv-line { border-bottom: 1.5px solid var(--ink); min-height: 17px; }
 
   .sign-area {
     position: relative; overflow: hidden; border-left: 1.5px solid var(--line); padding-left: 20px;
-    display: flex; flex-direction: column; justify-content: flex-end; min-height: 19mm;
+    display: flex; flex-direction: column; justify-content: flex-end; min-height: 13mm;
   }
-  .watermark { position: absolute; inset: 0; z-index: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; overflow: hidden; padding-bottom: 30px; }
+  .watermark { position: absolute; inset: 0; z-index: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; overflow: hidden; padding-bottom: 16px; }
   .watermark span {
     display: block; white-space: nowrap; transform: rotate(-18deg);
-    font-size: .78rem; font-weight: 800; letter-spacing: .04em;
+    font-size: .7rem; font-weight: 800; letter-spacing: .04em;
     color: var(--gold); opacity: .32;
   }
   .sign-row { position: relative; z-index: 1; display: flex; gap: 20px; align-items: flex-end; }
-  .sig-blank { flex: 1.4; border-bottom: 1.5px solid var(--ink); min-height: 22px; }
-  .date-blank { flex: 1; border-bottom: 1.5px solid var(--ink); min-height: 22px; text-align: center; font-weight: 700; font-size: .95rem; padding-bottom: 2px; }
-  .sign-labels { position: relative; z-index: 1; display: flex; gap: 20px; margin-top: 4px; }
-  .sign-labels span { font-size: .78rem; color: var(--ink-soft); }
+  .sig-blank { flex: 1.4; border-bottom: 1.5px solid var(--ink); min-height: 18px; }
+  .date-blank { flex: 1; border-bottom: 1.5px solid var(--ink); min-height: 18px; text-align: center; font-weight: 700; font-size: .84rem; padding-bottom: 1px; }
+  .sign-labels { position: relative; z-index: 1; display: flex; gap: 20px; margin-top: 2px; }
+  .sign-labels span { font-size: .7rem; color: var(--ink-soft); }
   .sign-labels span:first-child { flex: 1.4; text-align: center; }
   .sign-labels span:last-child { flex: 1; text-align: center; }
-  .sign-caption { position: relative; z-index: 1; display: flex; gap: 20px; margin-bottom: 8px; }
-  .sign-caption span:first-child { flex: 1.4; font-size: .95rem; font-weight: 700; }
-  .sign-caption span:last-child { flex: 1; font-size: .95rem; font-weight: 700; }
+  .sign-caption { position: relative; z-index: 1; display: flex; gap: 20px; margin-bottom: 3px; }
+  .sign-caption span:first-child { flex: 1.4; font-size: .82rem; font-weight: 700; }
+  .sign-caption span:last-child { flex: 1; font-size: .82rem; font-weight: 700; }
 
-  /* ---- back page: OPD First Visit Note (medical/procedure history) ---- */
-  .back-note-title { font-size: 1.3rem; font-weight: 800; color: var(--gold); letter-spacing: -.01em; display: block; }
-  .back-note-sub { font-size: .8rem; color: var(--ink-faint); display: block; margin-top: 2px; }
-  .back-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; }
-  .qa-line { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; border-bottom: 1px dashed var(--line); }
-  .qa-line:last-child { border-bottom: none; }
-  .qa-line .q { flex: 0 0 auto; font-weight: 700; font-size: .86rem; color: var(--ink); }
-  .qa-line .a { flex: 1; font-size: .86rem; color: var(--ink-soft); text-align: right; font-weight: 600; }
+  /* ---- OPD First Visit Note: merged onto the front card, so it has to
+     run smaller than a standalone page would — accepted trade-off for
+     keeping everything on the one small 148mm-tall printed card. ---- */
+  .fvn-block { margin-top: 4px; padding-top: 6px; border-top: 1.3px dashed var(--line); }
+  .fvn-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 4px; }
+  .fvn-title { font-size: .74rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--gold-deep); flex-shrink: 0; }
+  .fvn-reason { font-size: .74rem; color: var(--ink-soft); }
+  .fvn-reason b { color: var(--ink); font-weight: 700; }
+  .back-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+  .qa-line { display: flex; align-items: baseline; gap: 8px; padding: 2px 0; }
+  .qa-line .q { flex: 0 0 auto; font-weight: 700; font-size: .72rem; color: var(--ink); }
+  .qa-line .a { flex: 1; font-size: .72rem; color: var(--ink-soft); text-align: right; font-weight: 600; line-height: 1.25; }
 
   /* ---- staff-only print gate ---- */
   .doc-actions { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 22px; }
@@ -249,19 +253,6 @@
       animation: none; overflow: hidden; display: flex; flex-direction: column;
     }
     body { background: #fff; }
-
-    /* Stretch split-area down to the paper's bottom edge (instead of
-       stopping wherever "how did you find us" content ends), so sign-area's
-       existing justify-content:flex-end pushes signature/date to sit right
-       at the bottom — clear of where staff lay a photocopied ID card on top
-       after printing. This also keeps the divider line between the two
-       columns running the full height, same as the on-screen layout. */
-    .split-area { flex: 1; }
-
-    /* Back page (First Visit Note) prints as its own physical sheet —
-       staff duplex-print this job so it lands on the reverse of the front
-       card, then cut both sheets in half together. */
-    .page-shell.back { break-before: page; page-break-before: always; }
   }
 </style>
 </head>
@@ -516,18 +507,6 @@
             <div class="field"><label>บริเวณ</label><input type="text" name="fillerArea" placeholder="เช่น ใต้ตา, ปาก"></div>
           </div>
         </div>
-
-        <div class="field">
-          <label>ร้อยไหม <span class="en">Thread lift</span></label>
-          <div class="choice-row" style="margin-bottom:10px;">
-            <label><input type="radio" name="threadLiftHistory" value="ไม่เคย" checked> ไม่เคย</label>
-            <label><input type="radio" name="threadLiftHistory" value="เคย"> เคยล่าสุด</label>
-          </div>
-          <div class="row">
-            <div class="field"><label>เคยล่าสุดเมื่อ</label><input type="text" name="threadLiftLastDate" placeholder="เช่น ม.ค. 2569"></div>
-            <div class="field"><label>บริเวณ</label><input type="text" name="threadLiftArea" placeholder="เช่น แก้ม, กราม"></div>
-          </div>
-        </div>
       </div>
 
       <div class="part">
@@ -632,28 +611,11 @@
           </div>
         </div>
 
-      </div>
-    </div>
-
-    <div class="page-shell back">
-      <div class="paper">
-
-        <div style="margin-bottom:14px;">
-          <span class="back-note-title">OPD First Visit Note</span>
-          <span class="back-note-sub">บันทึกการซักประวัติครั้งแรก · เก็บไว้เป็นข้อมูลด้านหลังบัตร OPD</span>
-        </div>
-
-        <div class="form-box" style="margin-bottom:10px;">
-          <div class="line-row">
-            <div class="line-field wide"><span class="lf-label">ชื่อ-นามสกุล:</span><span class="lf-fill" id="outNameBack"></span></div>
-            <div class="line-field short"><span class="lf-label">วันที่:</span><span class="lf-fill fixed" id="outVisitDateBack"></span></div>
+        <div class="fvn-block">
+          <div class="fvn-head">
+            <span class="fvn-title">First Visit Note</span>
+            <span class="fvn-reason"><b>ปรึกษาแพทย์เรื่อง:</b> <span class="fvn-reason-value" id="outReason"></span></span>
           </div>
-          <div class="line-row">
-            <div class="line-field"><span class="lf-label">ปรึกษาแพทย์เรื่อง:</span><span class="lf-fill" id="outReason"></span></div>
-          </div>
-        </div>
-
-        <div class="form-box">
           <div class="back-grid">
             <div class="back-col">
               <div class="qa-line"><span class="q">โรคประจำตัว</span><span class="a" id="outUnderlying"></span></div>
@@ -661,14 +623,13 @@
               <div class="qa-line"><span class="q">แพ้ยา</span><span class="a" id="outDrugAllergy"></span></div>
               <div class="qa-line"><span class="q">อาการที่แพ้</span><span class="a" id="outAllergySymptom"></span></div>
               <div class="qa-line"><span class="q">แพ้ยากลุ่มเฉพาะ</span><span class="a" id="outSpecificAllergy"></span></div>
-              <div class="qa-line"><span class="q">ข้อมูลเพิ่มเติม</span><span class="a" id="outLifestyle"></span></div>
             </div>
             <div class="back-col">
               <div class="qa-line"><span class="q">ศัลยกรรมบนใบหน้า</span><span class="a" id="outSurgery"></span></div>
               <div class="qa-line"><span class="q">อุบัติเหตุบนใบหน้า</span><span class="a" id="outAccident"></span></div>
               <div class="qa-line"><span class="q">BOTOX</span><span class="a" id="outBotox"></span></div>
               <div class="qa-line"><span class="q">FILLER</span><span class="a" id="outFiller"></span></div>
-              <div class="qa-line"><span class="q">ร้อยไหม</span><span class="a" id="outThreadLift"></span></div>
+              <div class="qa-line"><span class="q">ข้อมูลเพิ่มเติม</span><span class="a" id="outLifestyle"></span></div>
             </div>
           </div>
         </div>
@@ -763,7 +724,6 @@
     var facialAccident = yesNoDetail(data.get('facialAccident'), 'ไม่เคย', data.get('facialAccidentDetail'));
     var botoxHistory = historyDetail(data.get('botoxHistory'), 'ไม่เคย', data.get('botoxLastDate'), data.get('botoxArea'));
     var fillerHistory = historyDetail(data.get('fillerHistory'), 'ไม่เคย', data.get('fillerLastDate'), data.get('fillerArea'));
-    var threadLiftHistory = historyDetail(data.get('threadLiftHistory'), 'ไม่เคย', data.get('threadLiftLastDate'), data.get('threadLiftArea'));
     var reasonForVisit = data.get('reasonForVisit');
 
     var payload = {
@@ -788,7 +748,6 @@
       facial_accident: facialAccident,
       botox_history: botoxHistory,
       filler_history: fillerHistory,
-      thread_lift_history: threadLiftHistory,
     };
 
     submitBtn.disabled = true;
@@ -819,8 +778,6 @@
         fill('outFindUs', data.get('findUs'));
         fill('outVisitDate', formatThaiDate(new Date()));
 
-        fill('outNameBack', (data.get('firstName') + ' ' + data.get('lastName')).trim());
-        fill('outVisitDateBack', formatThaiDate(new Date()));
         fill('outReason', reasonForVisit);
         fill('outUnderlying', underlyingDisease);
         fill('outMedication', regularMedication);
@@ -832,7 +789,6 @@
         fill('outAccident', facialAccident);
         fill('outBotox', botoxHistory);
         fill('outFiller', fillerHistory);
-        fill('outThreadLift', threadLiftHistory);
 
         formView.style.display = 'none';
         doc.style.display = 'block';
