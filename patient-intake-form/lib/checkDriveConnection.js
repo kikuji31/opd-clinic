@@ -4,12 +4,7 @@
 require('dotenv').config();
 const { google } = require('googleapis');
 
-const required = [
-  'GOOGLE_OAUTH_CLIENT_ID',
-  'GOOGLE_OAUTH_CLIENT_SECRET',
-  'GOOGLE_OAUTH_REFRESH_TOKEN',
-  'GOOGLE_DRIVE_FOLDER_ID',
-];
+const required = ['GOOGLE_SERVICE_ACCOUNT_KEY', 'GOOGLE_DRIVE_FOLDER_ID'];
 
 async function main() {
   const missing = required.filter((k) => !process.env[k]);
@@ -20,24 +15,21 @@ async function main() {
   }
   console.log('[OK] All required env vars are set.');
 
-  const oAuth2Client = new google.auth.OAuth2(
-    process.env.GOOGLE_OAUTH_CLIENT_ID,
-    process.env.GOOGLE_OAUTH_CLIENT_SECRET
-  );
-  oAuth2Client.setCredentials({ refresh_token: process.env.GOOGLE_OAUTH_REFRESH_TOKEN });
-  const drive = google.drive({ version: 'v3', auth: oAuth2Client });
+  const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
+  const auth = new google.auth.GoogleAuth({
+    credentials,
+    scopes: ['https://www.googleapis.com/auth/drive'],
+  });
+  const drive = google.drive({ version: 'v3', auth });
 
-  console.log('[..] Trying to refresh the access token...');
+  console.log('[..] Trying to get an access token for the service account...');
   try {
-    await oAuth2Client.getAccessToken();
-    console.log('[OK] Refresh token is valid — got a fresh access token.');
+    await auth.getAccessToken();
+    console.log('[OK] Service account key is valid — got a fresh access token.');
   } catch (err) {
-    console.error('[FAIL] Could not refresh access token:', err.response?.data || err.message);
-    console.error('       Most common cause: refresh token expired or was revoked.');
-    console.error('       If your Google Cloud OAuth consent screen is in "Testing" mode,');
-    console.error('       refresh tokens auto-expire after 7 days — publish the app to');
-    console.error('       "In production" (Google Cloud Console > APIs & Services > OAuth');
-    console.error('       consent screen) and re-generate the refresh token.');
+    console.error('[FAIL] Could not get access token:', err.response?.data || err.message);
+    console.error('       Most common cause: the key was revoked, or GOOGLE_SERVICE_ACCOUNT_KEY');
+    console.error('       isn\'t valid JSON.');
     process.exit(1);
   }
 
@@ -54,8 +46,8 @@ async function main() {
     }
   } catch (err) {
     console.error('[FAIL] Could not access folder:', err.response?.data?.error?.message || err.message);
-    console.error('       Check that GOOGLE_DRIVE_FOLDER_ID is correct and that the Google');
-    console.error('       account that generated the refresh token has access to it.');
+    console.error('       Check that GOOGLE_DRIVE_FOLDER_ID is correct and that the folder is');
+    console.error('       shared with the service account\'s client_email as an editor.');
     process.exit(1);
   }
 

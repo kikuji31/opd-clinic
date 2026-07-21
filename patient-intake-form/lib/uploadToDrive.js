@@ -2,12 +2,16 @@ const { google } = require('googleapis');
 const { Readable } = require('stream');
 
 function getDriveClient() {
-  const oAuth2Client = new google.auth.OAuth2(
-    process.env.GOOGLE_OAUTH_CLIENT_ID,
-    process.env.GOOGLE_OAUTH_CLIENT_SECRET
-  );
-  oAuth2Client.setCredentials({ refresh_token: process.env.GOOGLE_OAUTH_REFRESH_TOKEN });
-  return google.drive({ version: 'v3', auth: oAuth2Client });
+  // Service account instead of a user OAuth refresh token: refresh tokens
+  // issued while the OAuth consent screen is in "Testing" mode expire every
+  // 7 days, which silently broke uploads. A service account key doesn't
+  // expire, at the cost of needing the target folder shared with its email.
+  const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
+  const auth = new google.auth.GoogleAuth({
+    credentials,
+    scopes: ['https://www.googleapis.com/auth/drive'],
+  });
+  return google.drive({ version: 'v3', auth });
 }
 
 async function uploadPdf(buffer, filename) {
