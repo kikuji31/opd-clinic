@@ -41,7 +41,7 @@ getBrowser().catch(() => {}); // pre-warm; htmlToPdf below surfaces any real err
 
 async function htmlToPdf(html) {
   let browser = await getBrowser();
-  if (!browser.isConnected()) {
+  if (!browser.connected) {
     browserPromise = null;
     browser = await getBrowser();
   }
