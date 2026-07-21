@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ติดต่อ &amp; นัดหมาย | First Clinic</title>
+  <meta name="description" content="นัดหมายและปรึกษาบริการความงามที่ First Clinic ผ่านฟอร์ม โทร หรือ LINE">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="index.html" class="brand">First <span>Clinic</span></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="doctors.html">ทีมแพทย์</a></li>
+        <li class="dropdown">
+          <button class="nav-link-btn" type="button">บริการ ▾</button>
+          <div class="dropdown-menu">
+            <a href="services.html">บริการทั้งหมด</a>
+            <a href="filler.html">ฟิลเลอร์ (ภาพรวม)</a>
+            <a href="filler-undereye.html">ฟิลเลอร์ใต้ตา</a>
+            <a href="filler-doublelayer.html">ฟิลเลอร์ตาสองชั้น</a>
+            <a href="filler-face-areas.html">ฟิลเลอร์หน้าผาก / ร่องแก้ม / คาง</a>
+            <a href="anti-aging.html">Ulthera &amp; Meso Therapy</a>
+            <a href="eye-bag-surgery.html">ผ่าตัดถุงใต้ตา</a>
+            <a href="be1st-glasses.html">แว่นตา BE1st</a>
+          </div>
+        </li>
+        <li><a href="promotions.html">โปรโมชั่น</a></li>
+        <li><a href="reviews.html">รีวิว</a></li>
+        <li><a href="blog.html">บทความ</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="contact.html">ติดต่อ</a></li>
+      </ul>
+      <button class="hamburger" type="button" aria-label="เปิดเมนู">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <div class="nav-cta">
+      <a href="contact.html" class="btn btn-primary btn-sm">นัดหมาย</a>
+    </div>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="index.html">หน้าแรก</a> / ติดต่อ &amp; นัดหมาย
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <div class="section-head" style="margin-bottom:48px;">
+      <span class="eyebrow">Contact &amp; Booking</span>
+      <h1>ติดต่อ &amp; นัดหมาย</h1>
+      <p>กรอกแบบฟอร์มเพื่อนัดหมายปรึกษาแพทย์ หรือติดต่อเราโดยตรงผ่านโทรศัพท์และ LINE ทีมงานจะติดต่อกลับเพื่อยืนยันวันเวลาที่สะดวก</p>
+    </div>
+
+    <div class="grid grid-2">
+      <!-- Booking form -->
+      <div class="card">
+        <h3>แบบฟอร์มนัดหมาย</h3>
+        <form>
+          <div class="form-group">
+            <label for="fc-name">ชื่อ-นามสกุล</label>
+            <input type="text" id="fc-name" name="name" placeholder="ชื่อ-นามสกุลของคุณ" required>
+          </div>
+          <div class="form-group">
+            <label for="fc-phone">เบอร์โทรศัพท์</label>
+            <input type="tel" id="fc-phone" name="phone" placeholder="08X-XXX-XXXX" required>
+          </div>
+          <div class="form-group">
+            <label for="fc-service">บริการที่สนใจ</label>
+            <select id="fc-service" name="service">
+              <option value="">-- เลือกบริการ --</option>
+              <option value="undereye">ฟิลเลอร์ใต้ตา</option>
+              <option value="doublelayer">ฟิลเลอร์ตาสองชั้น</option>
+              <option value="face-areas">ฟิลเลอร์หน้าผาก / ร่องแก้ม / คาง</option>
+              <option value="ulthera">Ulthera</option>
+              <option value="meso">Meso Therapy</option>
+              <option value="eyebag">ผ่าตัดถุงใต้ตา</option>
+              <option value="other">อื่นๆ</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fc-branch">สาขาที่สะดวก</label>
+            <select id="fc-branch" name="branch">
+              <option value="">-- เลือกสาขา --</option>
+              <option value="branch-1">First Clinic [ชื่อสาขา — ใส่ข้อมูลจริง]</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fc-time">วัน-เวลาที่สะดวก</label>
+            <input type="datetime-local" id="fc-time" name="preferred-time">
+          </div>
+          <div class="form-group form-consent">
+            <input type="checkbox" id="fc-consent" name="consent" required>
+            <label for="fc-consent" style="font-weight:400;">
+              ข้าพเจ้ายินยอมให้ First Clinic เก็บและใช้ข้อมูลส่วนบุคคลเพื่อการติดต่อนัดหมายและให้คำปรึกษา
+              ตาม<a href="privacy.html">นโยบายความเป็นส่วนตัว (PDPA)</a>
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">ส่งแบบฟอร์มนัดหมาย</button>
+        </form>
+      </div>
+
+      <!-- Contact info -->
+      <div>
+        <div class="card" style="margin-bottom:24px;">
+          <h3>ช่องทางติดต่อ</h3>
+          <p>โทร: <a href="tel:0944094449" style="color:var(--gold-dark); font-weight:700;">094-409-4449</a></p>
+          <p>โทร: <a href="tel:0928088088" style="color:var(--gold-dark); font-weight:700;">092-808-8088</a></p>
+          <p class="muted">เวลาทำการ: [ใส่เวลาทำการจริง]</p>
+          <div class="hero-actions">
+            <a href="tel:0944094449" class="btn btn-primary">โทรเลย</a>
+            <a href="#" class="btn btn-outline">แชท LINE</a>
+          </div>
+        </div>
+        <div class="card" style="padding:0; overflow:hidden;">
+          <div class="img-placeholder" style="aspect-ratio:4/3;">
+            แผนที่คลินิก<br>[ใส่ Google Maps embed จริง]
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>First Clinic</h4>
+        <p style="color:#c9c2b4;">"ให้คุณได้เป็นตัวเองในแบบที่สวยที่สุด" — คลินิกเวชกรรมความงาม เฉพาะทางฟิลเลอร์รอบดวงตา ดูแลโดยทีมแพทย์</p>
+        <div class="social-row">
+          <a href="https://www.facebook.com" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+          <a href="https://www.instagram.com/firstclinic49" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+          <a href="https://www.youtube.com" target="_blank" rel="noopener" aria-label="YouTube">YT</a>
+          <a href="#" target="_blank" rel="noopener" aria-label="LINE">LN</a>
+        </div>
+      </div>
+      <div>
+        <h4>บริการ</h4>
+        <ul>
+          <li><a href="filler.html">ฟิลเลอร์</a></li>
+          <li><a href="anti-aging.html">Ulthera / Meso</a></li>
+          <li><a href="eye-bag-surgery.html">ผ่าตัดถุงใต้ตา</a></li>
+          <li><a href="be1st-glasses.html">แว่นตา BE1st</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>เกี่ยวกับ</h4>
+        <ul>
+          <li><a href="about.html">เกี่ยวกับเรา</a></li>
+          <li><a href="doctors.html">ทีมแพทย์</a></li>
+          <li><a href="reviews.html">รีวิว</a></li>
+          <li><a href="blog.html">บทความ</a></li>
+          <li><a href="locations.html">สาขา</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>ติดต่อ</h4>
+        <ul>
+          <li><a href="tel:0944094449">094-409-4449</a></li>
+          <li><a href="tel:0928088088">092-808-8088</a></li>
+          <li><a href="contact.html">แบบฟอร์มนัดหมาย</a></li>
+          <li class="muted">[ที่อยู่สาขา — ใส่ข้อมูลจริง]</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 First Clinic. All rights reserved.</span>
+      <span><a href="privacy.html">นโยบายความเป็นส่วนตัว (PDPA)</a> · <a href="terms.html">เงื่อนไขการใช้บริการ</a></span>
+    </div>
+  </div>
+</footer>
+
+<div class="float-stack">
+  <a href="#" class="float-btn line" aria-label="LINE" target="_blank" rel="noopener">LN</a>
+  <a href="tel:0944094449" class="float-btn call" aria-label="โทร">☎</a>
+  <button class="float-btn top" aria-label="กลับขึ้นด้านบน">↑</button>
+</div>
+<script src="assets/script.js"></script>
+</body>
+</html>
